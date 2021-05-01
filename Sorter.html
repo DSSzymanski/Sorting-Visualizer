@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+	<body>
+	<div id="taskbar" style="border: 1px solid black;">
+		<div id="algorithmContainer">
+			<form onsubmit="startAlgorithm();">
+				<label for="algorithm">Algorithm:</label>
+				<input list="algList" name="algorithm" id="algorithm">
+				<datalist id="algList">
+					<option value="Insertion" disabled selected>					
+					<option value="Quick" disabled>
+					<option value="Heap" disabled>
+					<option value="Bubble" disabled>
+					<option value="Merge" disabled>
+				</datalist>
+				<input type="submit" value="Start Sort">
+			</form>
+		</div>
+	</div>
+	<div id="canvasContainer">
+		<canvas id="sortingDisplayCanvas></canvas>
+	</div>
+	<div id="writeupContainer></div>
+	</body>
+</html>
