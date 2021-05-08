@@ -11,25 +11,31 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	</head>
-	<body>
-		<div id="taskbar" style="border: 1px solid black;">
-			<div id="algorithmContainer">
-				<form onsubmit="startAlgorithm();">
-					<label for="algorithm">Algorithm:</label>
-					<input list="algList" name="algorithm" id="algorithm">
-					<datalist id="algList">
-						<option value="Insertion" disabled selected>					
-						<option value="Quick" disabled>
-						<option value="Heap" disabled>
-						<option value="Bubble" disabled>
-						<option value="Merge" disabled>
-					</datalist>
-					<input type="submit" value="Start Sort">
-				</form>
+	<body onload="initCanvas()">
+		<div class="row">
+			<div class="col-md-1 col-sm-0"></div>
+			<div class="col-md-10 col-sm-12">
+				<div id="taskbar" style="border: 1px solid black;">
+					<div id="algorithmContainer">
+						<form onsubmit="startAlgorithm();">
+							<label for="algorithm">Algorithm:</label>
+							<input list="algList" name="algorithm" id="algorithm">
+							<datalist id="algList">
+								<option value="Insertion" disabled selected>					
+								<option value="Quick" disabled>
+								<option value="Heap" disabled>
+								<option value="Bubble" disabled>
+								<option value="Merge" disabled>
+							</datalist>
+							<input type="submit" value="Start Sort">
+						</form>
+					</div>
+				</div>
+				<div id="canvasContainer">
+					<canvas id="sortingDisplayCanvas"></canvas>
+				</div>
 			</div>
-		</div>
-		<div id="canvasContainer">
-			<canvas id="sortingDisplayCanvas"></canvas>
+			<div class="col-md-1 col-sm-0"></div>
 		</div>
 		<div id="writeupContainer"></div>
 	</body>
