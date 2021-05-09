@@ -11,7 +11,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	</head>
-	<body onload="initCanvas()">
+	<body>
 		<div class="row">
 			<div class="col-md-1 col-sm-0"></div>
 			<div class="col-md-10 col-sm-12">
@@ -27,8 +27,20 @@
 								<option value="Bubble" disabled>
 								<option value="Merge" disabled>
 							</datalist>
+							<label for="sizeSlider">Size:</label>
+							<input type="range" name="sizeSlider" id="sizeSlider" max="200" min="10" step="10">
 							<input type="submit" value="Start Sort">
 						</form>
+						<div id="metricsContainer">
+							<div id="stepContainer">
+								<label id="stepLabel">Steps:</label>
+								<div id="stepTB">0</div>
+							</div>
+							<div id="timeContainer">
+								<label id="timeLabel">Time(s):</label>
+								<div id="timeTB">0</div>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div id="canvasContainer">
