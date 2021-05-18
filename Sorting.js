@@ -1,5 +1,6 @@
-let initCanvas = () => {
-	drawOutline();
+let initCanvas2 = () => {
+	const canvas = document.querySelector("#sortingDisplayCanvas");
+	drawBar(canvas, 10, 0, Math.floor(canvas.width/100));
 }
 
 let drawOutline = () => {

@@ -1,5 +1,16 @@
 let init = () => {
 	initSlider();
+	initCanvas();
+	initCanvas2();
+}
+
+let initCanvas = () => {
+	const canvas = document.querySelector("#sortingDisplayCanvas");
+	const parent = canvas.parentElement.parentElement;
+	console.log(canvas.width, canvas.height, canvas.style.width, canvas.style.height);
+	canvas.width = 1000;
+	canvas.height = 200;
+	console.log(canvas.width, canvas.height, canvas.style.width, canvas.style.height);
 }
 
 let initSlider = () => {
