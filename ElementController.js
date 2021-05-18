@@ -1,16 +1,23 @@
 let init = () => {
 	initSlider();
-	initCanvas();
-	initCanvas2();
+	initSvg();
+	generateSvgElements();
 }
 
-let initCanvas = () => {
-	const canvas = document.querySelector("#sortingDisplayCanvas");
-	const parent = canvas.parentElement.parentElement;
-	console.log(canvas.width, canvas.height, canvas.style.width, canvas.style.height);
-	canvas.width = 1000;
-	canvas.height = 200;
-	console.log(canvas.width, canvas.height, canvas.style.width, canvas.style.height);
+let initSvg = () => {
+	const svg = document.querySelector("#sortingDisplaySvg");
+	svg.setAttribute("width", "1000");
+	svg.setAttribute("height", "400");
+}
+
+let generateSvgElements = (arrSize) => {
+	const svg = document.querySelector("#sortingDisplaySvg");
+	svgDim = getDim(svg);
+	
+}
+
+let getDim = (svg) => {
+	return [Number(svg.getAttribute("width")), Number(svg.getAttribute("height"))];
 }
 
 let initSlider = () => {

@@ -11,11 +11,15 @@
 	display: flex;
 }
 
-#canvasContainer {
+svg {
+	margin: 0px;
+}
+
+#svgContainer {
 	border: 1px solid black;
 }
 
-div, form {
+div{
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
