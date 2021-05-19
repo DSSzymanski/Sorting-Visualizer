@@ -15,7 +15,7 @@ svg {
 	margin: 0px;
 }
 
-#svgContainer {
+#svgContainer, svg {
 	border: 1px solid black;
 }
 
