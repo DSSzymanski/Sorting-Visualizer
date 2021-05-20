@@ -19,21 +19,35 @@ let generateSvgElements = (eleSize) => {
 	const values = [];
 	for(j=1; j <= eleSize; j++) {
 		values.push(height*j);
+		text = createText(height*j, j, width);
+		svg.appendChild(text);
 	}
-
+	console.log(values);
 	for(i=0; i < eleSize; i++) {
-		newRect = createRect(values[i], i, width, svgDim);
-		svg.appendChild(newRect);
+		rect = createRect(values[i], i, width);
+		svg.appendChild(rect);
 	}
 }
 
-let createRect = (height, pos, width, svgDim) => {
-	newRect = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
-	newRect.setAttribute('x', pos*width);
-	newRect.setAttribute('y', 350-height);
-	newRect.setAttribute('width', width);
-	newRect.setAttribute('height', height);
-	return newRect;
+let createText = (height, pos, width) => {
+	const rotation = "rotate(90,"+(pos-.75)*width+","+350+")";
+	text = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+	text.setAttribute('x', (pos-.5)*width);
+	text.setAttribute('y', 350);
+	text.setAttribute('transform', rotation);
+	text.textContent = height;
+	return text;
+}
+
+let createRect = (height, pos, width) => {
+	style = "fill: white; stroke-width: 1; stroke: black"
+	rect = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+	rect.setAttribute('x', pos*width);
+	rect.setAttribute('y', 350-height);
+	rect.setAttribute('width', width);
+	rect.setAttribute('height', height);
+	rect.setAttribute('style', style);
+	return rect;
 }
 
 /**
