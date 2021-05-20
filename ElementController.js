@@ -1,7 +1,6 @@
 let init = () => {
-	initSlider();
 	initSvg();
-	generateSvgElements(25);
+	initSlider();
 }
 
 
@@ -13,6 +12,7 @@ let initSvg = () => {
 
 let generateSvgElements = (eleSize) => {
 	const svg = document.querySelector("#sortingDisplaySvg");
+	svg.querySelectorAll('*').forEach(element => element.remove());
 	svgDim = getDim(svg);
 	const width = svgDim[0]/eleSize;
 	const height = 350/eleSize;
@@ -22,7 +22,6 @@ let generateSvgElements = (eleSize) => {
 		text = createText(height*j, j, width);
 		svg.appendChild(text);
 	}
-	console.log(values);
 	for(i=0; i < eleSize; i++) {
 		rect = createRect(values[i], i, width);
 		svg.appendChild(rect);
@@ -67,8 +66,18 @@ let getDim = (svg) => {
 let initSlider = () => {
 	const slider = document.querySelector("#sizeSlider");
 	let text = document.querySelector("#sliderTB");
+
+	const initialValue = 25;
+
+	//initialize slider, textbox, and svg elements with initial value
+	slider.value = initialValue;
+	text.innerText = "Size: " + initialValue;
+	generateSvgElements(initialValue);
+
+	//setup slider to change text and svg elements when slid
 	slider.oninput = function() {
 		text.innerText = "Size: " + this.value;
+		generateSvgElements(this.value);
 	}
 }
 
