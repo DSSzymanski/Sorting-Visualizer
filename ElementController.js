@@ -57,12 +57,13 @@ let generateSvgElements = (eleSize) => {
 let createText = (height, pos, width) => {
 	//string for rotating text 90 degrees
 	const rotation = "rotate(90,"+(pos-.75)*width+","+350+")";
-	text = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+	let text = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+	const translate = 'translate(' + (pos-.5)*width + ')';
 	
 	//setup text element
-	text.setAttribute('x', (pos-.5)*width);
+	text.setAttribute('x', 0);
 	text.setAttribute('y', 350);
-	text.setAttribute('transform', rotation);
+	text.setAttribute('transform', rotation + ' ' + translate);
 	text.textContent = height;
 	
 	return text;
@@ -79,16 +80,18 @@ let createText = (height, pos, width) => {
  */
 let createRect = (height, pos, width) => {
 	//string for rect style
-	const style = "fill: white; stroke-width: 1; stroke: black"
-	rect = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+	const style = "fill: white; stroke-width: 1; stroke: black";
+	let rect = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+	const translate = 'translate(' + pos*width + ')';
 
 	//setup rect
-	rect.setAttribute('x', pos*width);
+	rect.setAttribute('x', 0);
 	rect.setAttribute('y', 350-height);
 	rect.setAttribute('width', width);
 	rect.setAttribute('height', height);
 	rect.setAttribute('style', style);
-	
+	rect.setAttribute('transform', translate);
+
 	return rect;
 }
 
