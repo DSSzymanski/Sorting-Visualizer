@@ -20,7 +20,7 @@ let initSvg = () => {
  *	equally spaced bars to sort through.
  *
  *@param 	{int}	eleSize: int representing amount of numbers to sort through.
- *TODOS: 2 below
+ *TODOS: 1 below
 */
 let generateSvgElements = (eleSize) => {
 	const svg = document.querySelector("#sortingDisplaySvg");
@@ -38,15 +38,10 @@ let generateSvgElements = (eleSize) => {
 	//TODO: change for variable window size 
 	const height = 350/eleSize;
 
-	const values = [];
-	//TODO: below 2 for loops can be done in 1
-	for(j=1; j <= eleSize; j++) {
-		values.push(height*j);
-		text = createText(height*j, j, width);
+	for(i=1; i <= eleSize; i++) {
+		text = createText(height*i, i, width);
 		svg.appendChild(text);
-	}
-	for(i=0; i < eleSize; i++) {
-		rect = createRect(values[i], i, width);
+		rect = createRect(height*i, i-1, width);
 		svg.appendChild(rect);
 	}
 }
