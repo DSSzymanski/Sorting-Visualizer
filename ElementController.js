@@ -37,10 +37,7 @@ let generateSvgElements = (eleSize) => {
 	//constant used for sizing bars into equal heights based on svg window
 	//TODO: change for variable window size 
 	const height = 350/eleSize;
-
-	var rects = [];
-	var texts = [];
-
+	
 	for(i=1; i <= eleSize; i++) {
 		text = createText(height*i, i, width);
 		svg.appendChild(text);
@@ -51,11 +48,21 @@ let generateSvgElements = (eleSize) => {
 	}
 }
 
-//TODO: document this
+/*
+ *Swaps positioning of 2 bars (rect and text pair) on the svg element by
+ * swaping the elements' transform attributes.
+ *
+ *@param 	{rect}		rect1: svg rectangle element to swap.
+ *@param 	{rect}		rect2: svg rectangle element to swap.
+ *@param 	{text}		text1: svg text element to swap.
+ *@param 	{text}		text2: svg text element to swap.
+ */
 let swap = (rect1, rect2, text1, text2) => {
+	//
 	let temp1 = rect1.getAttribute('transform');
 	rect1.setAttribute('transform', rect2.getAttribute('transform'));
 	rect2.setAttribute('transform', temp1);
+
 	let temp2 = text1.getAttribute('transform');
 	text1.setAttribute('transform', text2.getAttribute('transform'));
 	text2.setAttribute('transform', temp2);
@@ -64,21 +71,21 @@ let swap = (rect1, rect2, text1, text2) => {
 /*
  *Creates a text element within svg window.
  *
- *@param 	{int}		height: int representing the text value
- *@param 	{int}		pos: int representing which bar the text belongs to and positioning
+ *@param 	{int}		height: int representing the text value.
+ *@param 	{int}		pos: int representing which bar the text belongs to and positioning.
  *@param 	{number}	width: decimal value represeting the width of the bar/text area.
  *TODO: change positioning to window size from static value
  */
 let createText = (height, pos, width) => {
 	//string for rotating text 90 degrees
-	const rotation = "rotate(90,"+(pos-.75)*width+","+350+")";
+	const rotation = "rotate(90, " +(pos-.5)*width + ", 375)";
 	let text = document.createElementNS("http://www.w3.org/2000/svg", 'text');
-	const translate = 'translate(' + (pos-.5)*width + ')';
+	const translate = 'translate(' + (pos-.75)*width + ')';
 	
 	//setup text element
 	text.setAttribute('x', 0);
-	text.setAttribute('y', 350);
-	text.setAttribute('transform', rotation + ' ' + translate);
+	text.setAttribute('y', 380);
+	text.setAttribute('transform', rotation + " " + translate);
 	text.textContent = height;
 	
 	return text;
@@ -87,8 +94,8 @@ let createText = (height, pos, width) => {
 /*
  *Creates a rect element representing a bar within svg window.
  *
- *@param 	{int}		height: int representing the text value
- *@param 	{int}		pos: int representing which bar the text belongs to and positioning
+ *@param 	{int}		height: int representing the text value.
+ *@param 	{int}		pos: int representing which bar the text belongs to and positioning.
  *@param 	{number}	width: decimal value represeting the width of the bar/text area.
  *TODO: change positioning to window size from static value
  *TODO: change styling of bars
