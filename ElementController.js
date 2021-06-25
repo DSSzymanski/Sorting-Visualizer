@@ -38,12 +38,27 @@ let generateSvgElements = (eleSize) => {
 	//TODO: change for variable window size 
 	const height = 350/eleSize;
 
+	var rects = [];
+	var texts = [];
+
 	for(i=1; i <= eleSize; i++) {
 		text = createText(height*i, i, width);
 		svg.appendChild(text);
+		texts.push(text);
 		rect = createRect(height*i, i-1, width);
 		svg.appendChild(rect);
+		rects.push(rect);
 	}
+}
+
+//TODO: document this
+let swap = (rect1, rect2, text1, text2) => {
+	let temp1 = rect1.getAttribute('transform');
+	rect1.setAttribute('transform', rect2.getAttribute('transform'));
+	rect2.setAttribute('transform', temp1);
+	let temp2 = text1.getAttribute('transform');
+	text1.setAttribute('transform', text2.getAttribute('transform'));
+	text2.setAttribute('transform', temp2);
 }
 
 /*
