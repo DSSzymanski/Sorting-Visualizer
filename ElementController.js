@@ -3,49 +3,117 @@ let init = () => {
 	initSlider();
 }
 
-
+/*
+ *Sets up svg window to preset size inside correct div.
+ *TODO: change to scale with window size.
+ */
 let initSvg = () => {
 	const svg = document.querySelector("#sortingDisplaySvg");
 	svg.setAttribute("width", "1000");
 	svg.setAttribute("height", "400");
 }
 
+/*
+ *Generates bar and text elements within svg.
+ *
+ *Uses svg window dimensions to create an array of bars and text representing
+ *	equally spaced bars to sort through.
+ *
+ *@param 	{int}	eleSize: int representing amount of numbers to sort through.
+ *TODOS: 1 below
+*/
 let generateSvgElements = (eleSize) => {
 	const svg = document.querySelector("#sortingDisplaySvg");
+
+	//remove all elements within svg to get blank svg
 	svg.querySelectorAll('*').forEach(element => element.remove());
+
+	//gets dimentions of svg in [width, height] format
 	svgDim = getDim(svg);
+
+	//constant to be used for the width of each bar
 	const width = svgDim[0]/eleSize;
+	
+	//constant used for sizing bars into equal heights based on svg window
+	//TODO: change for variable window size 
 	const height = 350/eleSize;
-	const values = [];
-	for(j=1; j <= eleSize; j++) {
-		values.push(height*j);
-		text = createText(height*j, j, width);
+	
+	for(i=1; i <= eleSize; i++) {
+		text = createText(height*i, i, width);
 		svg.appendChild(text);
-	}
-	for(i=0; i < eleSize; i++) {
-		rect = createRect(values[i], i, width);
+		texts.push(text);
+		rect = createRect(height*i, i-1, width);
 		svg.appendChild(rect);
+		rects.push(rect);
 	}
 }
 
+/*
+ *Swaps positioning of 2 bars (rect and text pair) on the svg element by
+ * swaping the elements' transform attributes.
+ *
+ *@param 	{rect}		rect1: svg rectangle element to swap.
+ *@param 	{rect}		rect2: svg rectangle element to swap.
+ *@param 	{text}		text1: svg text element to swap.
+ *@param 	{text}		text2: svg text element to swap.
+ */
+let swap = (rect1, rect2, text1, text2) => {
+	//
+	let temp1 = rect1.getAttribute('transform');
+	rect1.setAttribute('transform', rect2.getAttribute('transform'));
+	rect2.setAttribute('transform', temp1);
+
+	let temp2 = text1.getAttribute('transform');
+	text1.setAttribute('transform', text2.getAttribute('transform'));
+	text2.setAttribute('transform', temp2);
+}
+
+/*
+ *Creates a text element within svg window.
+ *
+ *@param 	{int}		height: int representing the text value.
+ *@param 	{int}		pos: int representing which bar the text belongs to and positioning.
+ *@param 	{number}	width: decimal value represeting the width of the bar/text area.
+ *TODO: change positioning to window size from static value
+ */
 let createText = (height, pos, width) => {
-	const rotation = "rotate(90,"+(pos-.75)*width+","+350+")";
-	text = document.createElementNS("http://www.w3.org/2000/svg", 'text');
-	text.setAttribute('x', (pos-.5)*width);
-	text.setAttribute('y', 350);
-	text.setAttribute('transform', rotation);
+	//string for rotating text 90 degrees
+	const rotation = "rotate(90, " +(pos-.5)*width + ", 375)";
+	let text = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+	const translate = 'translate(' + (pos-.75)*width + ')';
+	
+	//setup text element
+	text.setAttribute('x', 0);
+	text.setAttribute('y', 380);
+	text.setAttribute('transform', rotation + " " + translate);
 	text.textContent = height;
+	
 	return text;
 }
 
+/*
+ *Creates a rect element representing a bar within svg window.
+ *
+ *@param 	{int}		height: int representing the text value.
+ *@param 	{int}		pos: int representing which bar the text belongs to and positioning.
+ *@param 	{number}	width: decimal value represeting the width of the bar/text area.
+ *TODO: change positioning to window size from static value
+ *TODO: change styling of bars
+ */
 let createRect = (height, pos, width) => {
-	style = "fill: white; stroke-width: 1; stroke: black"
-	rect = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
-	rect.setAttribute('x', pos*width);
+	//string for rect style
+	const style = "fill: white; stroke-width: 1; stroke: black";
+	let rect = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+	const translate = 'translate(' + pos*width + ')';
+
+	//setup rect
+	rect.setAttribute('x', 0);
 	rect.setAttribute('y', 350-height);
 	rect.setAttribute('width', width);
 	rect.setAttribute('height', height);
 	rect.setAttribute('style', style);
+	rect.setAttribute('transform', translate);
+
 	return rect;
 }
 
