@@ -6,9 +6,9 @@ let insertionSort = async(rects, texts) => {
 	let currRectIdx, key, compRectIdx;
 
 	for(currRectIdx = 1; currRectIdx < texts.length; currRectIdx++) {
-		key = parseInt(texts[currRectIdx].textContent);
+		key = parseFloat(texts[currRectIdx].textContent);
 		compRectIdx = currRectIdx-1;
-		while(compRectIdx >= 0 && key < parseInt(texts[compRectIdx].textContent)) {
+		while(compRectIdx >= 0 && key < parseFloat(texts[compRectIdx].textContent)) {
 			//swaps translation of rectangles and texts
 			await swap(rects[compRectIdx], rects[compRectIdx+1], texts[compRectIdx], texts[compRectIdx+1]);
 			//swap array positioning within texts
