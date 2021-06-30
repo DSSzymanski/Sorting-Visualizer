@@ -39,9 +39,6 @@ let generateSvgElements = (eleSize) => {
 	const height = 350/eleSize;
 	
 	let nums = [];
-	let rects = [];
-	let texts = [];
-
 	for(let i = 1; i <= eleSize; i++) {
 		nums.push(height*i);
 	}
@@ -52,20 +49,13 @@ let generateSvgElements = (eleSize) => {
 		svg.appendChild(text);
 		rect = createRect(nums[i-1], i-1, width);
 		svg.appendChild(rect);
-		texts.push(text);
-		rects.push(rect);
 	}
-	/*
-	for(let i = 1; i <= eleSize; i++) {
-		text = createText(height*i, i, width);
-		svg.appendChild(text);
-		rect = createRect(height*i, i-1, width);
-		svg.appendChild(rect);
-		texts.push(text);
-		rects.push(rect);
-	}
-	*/
-	insertionSort(rects, texts);
+}
+
+//TODO: document
+//Note gets text and rect elements in order
+let getElements = () => {
+	return [document.querySelectorAll('rect'), document.querySelectorAll('text')];
 }
 
 /*
