@@ -13,6 +13,26 @@ let initSvg = () => {
 	svg.setAttribute("height", "400");
 }
 
+let startAlgorithm = async () => {
+	const BUBBLE = "Bubble Sort";
+	const HEAP = "Heap Sort";
+	const INSERTION = "Insertion Sort";
+	const MERGE = "Merge Sort";
+	const QUICK = "Quick Sort";
+	const COMPARE_TRUE = 0;
+
+
+	//get select html element
+	const algSelect = document.querySelector("#algList");
+
+	let [rects, texts] = getSortingElements();
+
+	const alg = algSelect.options[algSelect.selectedIndex].text;
+	if(INSERTION.localeCompare(alg) == COMPARE_TRUE){
+		insertionSort(rects, texts);
+	}
+}
+
 /*
  *Generates bar and text elements within svg.
  *
@@ -38,14 +58,25 @@ let generateSvgElements = (eleSize) => {
 	//TODO: change for variable window size 
 	const height = 350/eleSize;
 	
-	for(i=1; i <= eleSize; i++) {
-		text = createText(height*i, i, width);
-		svg.appendChild(text);
-		texts.push(text);
-		rect = createRect(height*i, i-1, width);
-		svg.appendChild(rect);
-		rects.push(rect);
+	//randomize order of numbers used to generate rect/text values
+	let nums = [];
+	for(let i = 1; i <= eleSize; i++) {
+		nums.push(height*i);
 	}
+	nums = nums.sort(() => Math.random() - 0.5);
+	
+	for(let i = 1; i <= eleSize; i++) {
+		text = createText(nums[i-1], i, width);
+		svg.appendChild(text);
+		rect = createRect(nums[i-1], i-1, width);
+		svg.appendChild(rect);
+	}
+}
+
+//TODO: document
+//Note gets text and rect elements in order
+let getSortingElements = () => {
+	return [[...document.querySelectorAll('rect')], [...document.querySelectorAll('text')]];
 }
 
 /*
@@ -58,14 +89,19 @@ let generateSvgElements = (eleSize) => {
  *@param 	{text}		text2: svg text element to swap.
  */
 let swap = (rect1, rect2, text1, text2) => {
-	//
-	let temp1 = rect1.getAttribute('transform');
-	rect1.setAttribute('transform', rect2.getAttribute('transform'));
-	rect2.setAttribute('transform', temp1);
+	return new Promise((resolve) => {
+		let swaps = () => {
+			let temp1 = rect1.getAttribute('transform');
+			rect1.setAttribute('transform', rect2.getAttribute('transform'));
+			rect2.setAttribute('transform', temp1);
 
-	let temp2 = text1.getAttribute('transform');
-	text1.setAttribute('transform', text2.getAttribute('transform'));
-	text2.setAttribute('transform', temp2);
+			let temp2 = text1.getAttribute('transform');
+			text1.setAttribute('transform', text2.getAttribute('transform'));
+			text2.setAttribute('transform', temp2);
+			resolve();
+		}
+		setTimeout(swaps, 500);
+	});
 }
 
 /*
