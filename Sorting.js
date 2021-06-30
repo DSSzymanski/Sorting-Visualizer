@@ -1,23 +1,22 @@
 //TODO: document
 let insertionSort = async(rects, texts) => {
-	//i = represents position of current element
-	//j = represents which position i is being tested against
-	//key = int value of i
-	//temp = temporary to switch arr position of rects and texts
-	let i, key, j;
+	//currRectIdx = represents position of current element
+	//compRectIdx = represents which position currRectIdx is being tested against
+	//key = int value of currRectIdx
+	let currRectIdx, key, compRectIdx;
 
-	for(i = 1; i < texts.length; i++) {
-		key = parseInt(texts[i].textContent);
-		j = i-1;
-		while(j >= 0 && key < parseInt(texts[j].textContent)) {
+	for(currRectIdx = 1; currRectIdx < texts.length; currRectIdx++) {
+		key = parseInt(texts[currRectIdx].textContent);
+		compRectIdx = currRectIdx-1;
+		while(compRectIdx >= 0 && key < parseInt(texts[compRectIdx].textContent)) {
 			//swaps translation of rectangles and texts
-			await swap(rects[j], rects[j+1], texts[j], texts[j+1]);
+			await swap(rects[compRectIdx], rects[compRectIdx+1], texts[compRectIdx], texts[compRectIdx+1]);
 			//swap array positioning within texts
-			[texts[j], texts[j+1]] = [texts[j+1], texts[j]];
+			[texts[compRectIdx], texts[compRectIdx+1]] = [texts[compRectIdx+1], texts[compRectIdx]];
 			//swap array positioning withing rects
-			[rects[j], rects[j+1]] = [rects[j+1], rects[j]];
+			[rects[compRectIdx], rects[compRectIdx+1]] = [rects[compRectIdx+1], rects[compRectIdx]];
 
-			j -= 1;
+			compRectIdx -= 1;
 		}
 	}
 }
