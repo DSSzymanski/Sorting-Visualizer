@@ -13,6 +13,26 @@ let initSvg = () => {
 	svg.setAttribute("height", "400");
 }
 
+let startAlgorithm = async () => {
+	const BUBBLE = "Bubble Sort";
+	const HEAP = "Heap Sort";
+	const INSERTION = "Insertion Sort";
+	const MERGE = "Merge Sort";
+	const QUICK = "Quick Sort";
+	const COMPARE_TRUE = 0;
+
+
+	//get select html element
+	const algSelect = document.querySelector("#algList");
+
+	let [rects, texts] = getSortingElements();
+
+	const alg = algSelect.options[algSelect.selectedIndex].text;
+	if(INSERTION.localeCompare(alg) == COMPARE_TRUE){
+		insertionSort(rects, texts);
+	}
+}
+
 /*
  *Generates bar and text elements within svg.
  *
@@ -38,6 +58,7 @@ let generateSvgElements = (eleSize) => {
 	//TODO: change for variable window size 
 	const height = 350/eleSize;
 	
+	//randomize order of numbers used to generate rect/text values
 	let nums = [];
 	for(let i = 1; i <= eleSize; i++) {
 		nums.push(height*i);
@@ -54,8 +75,8 @@ let generateSvgElements = (eleSize) => {
 
 //TODO: document
 //Note gets text and rect elements in order
-let getElements = () => {
-	return [document.querySelectorAll('rect'), document.querySelectorAll('text')];
+let getSortingElements = () => {
+	return [[...document.querySelectorAll('rect')], [...document.querySelectorAll('text')]];
 }
 
 /*
