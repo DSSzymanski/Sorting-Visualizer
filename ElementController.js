@@ -24,6 +24,8 @@ let startAlgorithm = async () => {
 
 	//get select html element
 	const algSelect = document.querySelector("#algList");
+	//disable button
+	document.querySelector("#startBtn").disabled = true;
 
 	let [rects, texts] = getSortingElements();
 
