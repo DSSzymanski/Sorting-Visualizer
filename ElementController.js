@@ -13,6 +13,15 @@ let initSvg = () => {
 	svg.setAttribute("height", "400");
 }
 
+let resetSvg = () => {
+	//re-enable slider and start button
+	document.querySelector("#startBtn").disabled = false;
+	let slider = document.querySelector("#sizeSlider");
+	slider.disabled = false;
+
+	generateSvgElements(slider.value);
+}
+
 //document
 let startAlgorithm = async () => {
 	//constant text to compare to input alg type
@@ -177,7 +186,7 @@ let initSlider = () => {
 	const slider = document.querySelector("#sizeSlider");
 	let text = document.querySelector("#sliderTB");
 
-	const initialValue = 25;
+	const initialValue = 20;
 
 	//initialize slider, textbox, and svg elements with initial value
 	slider.value = initialValue;
