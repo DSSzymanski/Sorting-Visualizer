@@ -13,7 +13,9 @@ let initSvg = () => {
 	svg.setAttribute("height", "400");
 }
 
+//document
 let startAlgorithm = async () => {
+	//constant text to compare to input alg type
 	const BUBBLE = "Bubble Sort";
 	const HEAP = "Heap Sort";
 	const INSERTION = "Insertion Sort";
@@ -24,11 +26,13 @@ let startAlgorithm = async () => {
 
 	//get select html element
 	const algSelect = document.querySelector("#algList");
-	//disable button
+	//disable buttons to prevent algorithm from being run multiple times/interupted
 	document.querySelector("#startBtn").disabled = true;
+	document.querySelector("#sizeSlider").disabled = true;
 
+	//get elements in svg
 	let [rects, texts] = getSortingElements();
-
+	//get and run algorithm chosen
 	const alg = algSelect.options[algSelect.selectedIndex].text;
 	if(INSERTION.localeCompare(alg) == COMPARE_TRUE){
 		insertionSort(rects, texts);
