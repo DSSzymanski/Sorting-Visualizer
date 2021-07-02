@@ -1,3 +1,8 @@
+let quickSort = async(rects, texts, low=0, high=rects.length) => {
+	return;
+}
+
+
 /**
  * Insertion sort algorithm. Run when algorithm select box is on insersion sort and start button is clicked.
  *

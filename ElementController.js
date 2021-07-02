@@ -59,6 +59,9 @@ let startAlgorithm = async () => {
 	if(INSERTION.localeCompare(alg) == COMPARE_TRUE){
 		insertionSort(rects, texts);
 	}
+	else if(QUICK.localeCompare(alg) == COMPARE_TRUE){
+		quickSort(rects, texts);
+	}
 }
 
 /**
