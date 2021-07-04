@@ -1,5 +1,96 @@
-let mergeSort = () => {
-	return;
+/*
+let mergeSort = (nums, left=0, right=nums.length-1) => {
+	if(left < right) {
+		let middle = Math.floor((left+right)/2);
+		mergeSort(nums, left, middle);
+		mergeSort(nums, middle+1, right);
+		m(nums, left, middle, right);
+	}
+}
+
+let m = (nums, left, middle, right) => {
+	let idx;
+	let l = [], r = [];
+	for(idx = left; idx <= middle; idx++) {
+		l.push(nums[idx]);
+	}
+	l.push(75);
+	for(idx = middle+1; idx <= right; idx++){
+		r.push(nums[idx]);
+	}
+	r.push(75);
+	let x = 0, y = 0;
+	for(idx = left; idx <= right; idx++){
+		if(l[x] < r[y]){
+			nums[idx] = l[x];
+			x+=1;
+		}
+		else{
+			nums[idx] = r[y];
+			y+= 1;
+		}
+	}
+}*/
+
+let mergeSort = (rects, texts) => {
+	const translations = getTranslations(rects.length);
+	console.log(translations);
+	mSort(rects, texts, 0, rects.length-1, translations);
+}
+
+let mSort = (rects, texts, leftPtr, rightPtr, translations) => {
+	if(leftPtr < rightPtr){
+		let middlePtr = Math.floor((leftPtr+rightPtr)/2);
+		mSort(rects, texts, leftPtr, middlePtr, translations);
+		mSort(rects, texts, middlePtr+1, rightPtr, translations);
+		merge(rects, texts, leftPtr, middlePtr, rightPtr, translations);
+	}
+}
+
+let merge = (rects, texts, leftPtr, middlePtr, rightPtr, translations) => {
+	let idx;
+	let leftRect = [], rightRect = [], leftText = [], rightText = [];
+	for(idx = leftPtr; idx <= middlePtr; idx++) {
+		hideElements(rects[idx], texts[idx]);
+		leftText.push(texts[idx]);
+		leftRect.push(rects[idx]);
+	}
+	for(idx = middlePtr+1; idx <= rightPtr; idx++){
+		hideElements(rects[idx], texts[idx]);
+		rightText.push(texts[idx]);
+		rightRect.push(rects[idx]);
+	}
+	let l = 0;
+	let r = 0;
+	for(let i = leftPtr; i <= rightPtr; i++) {
+		let x, y;
+		if(l >= leftRect.length) {
+			x = 1000000000;
+		}
+		else{
+			x = parseFloat(leftRect[l].getAttribute('height'));
+		}
+		if(r >= rightRect.length){
+			y = 1000000000;
+		}
+		else{
+			y = parseFloat(rightRect[r].getAttribute('height'));
+		}
+		if(x < y){
+			leftRect[l].setAttribute('transform', translations[0][i]);
+			leftText[l].setAttribute('transform', translations[1][i]);
+			rects[i] = leftRect[l];
+			texts[i] = leftText[l];
+			l += 1;
+		}
+		else{
+			rightRect[r].setAttribute('transform', translations[0][i]);
+			rightText[r].setAttribute('transform', translations[1][i]);
+			rects[i] = rightRect[r];
+			texts[i] = rightText[r];
+			r += 1;
+		}
+	}
 }
 
 let bubbleSort = () => {
