@@ -1,3 +1,15 @@
+let mergeSort = () => {
+	return;
+}
+
+let bubbleSort = () => {
+	return;
+}
+
+let heapSort = () => {
+	return;
+}
+
 //TODO: document
 let quickSort = async(rects, texts, low=0, high=rects.length-1) => {
 	let pivot;
