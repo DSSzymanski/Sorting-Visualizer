@@ -1,28 +1,32 @@
+//TODO: document
 let quickSort = async(rects, texts, low=0, high=rects.length-1) => {
 	let pivot;
 	if(low < high) {
-		pivot = partition(rects, texts, low, high);
+		pivot = await partition(rects, texts, low, high);
 		quickSort(rects, texts, low, pivot-1);
 		quickSort(rects, texts, pivot+1, high);
 	}
 }
 
-let partition = (rects, texts, low, high) => {
+//TODO: document
+let partition = async (rects, texts, low, high) => {
 	let pivot, lowPtr, j; //j = loop iterator, lowPtr = position of lower than pivot
 	pivot = parseFloat(texts[high].textContent);
 	lowPtr = low - 1;
 	for(j = low; j < high; j++) {
 		if(parseFloat(texts[j].textContent) < pivot) {
 			lowPtr = lowPtr + 1;
-			swap(rects[lowPtr], rects[j], texts[lowPtr], texts[j]);
+			await swap(rects[lowPtr], rects[j], texts[lowPtr], texts[j]);
 			[rects[lowPtr], rects[j]] = [rects[j], rects[lowPtr]];
 			[texts[lowPtr], texts[j]] = [texts[j], texts[lowPtr]];
 		}
 	}
-	swap(rects[lowPtr+1], rects[high], texts[high], texts[lowPtr+1]);
-	[rects[lowPtr+1], rects[high]] = [rects[high], rects[lowPtr+1]];
-	[texts[lowPtr+1], texts[high]] = [texts[high], texts[lowPtr+1]];
-	return lowPtr + 1;
+	if(lowPtr+1 != high){
+		await swap(rects[lowPtr+1], rects[high], texts[high], texts[lowPtr+1]);
+		[rects[lowPtr+1], rects[high]] = [rects[high], rects[lowPtr+1]];
+		[texts[lowPtr+1], texts[high]] = [texts[high], texts[lowPtr+1]];
+	}
+	return Promise.resolve(lowPtr + 1);
 }
 
 /**
