@@ -3,7 +3,7 @@ let init = () => {
 	initSlider();
 }
 
-/*
+/**
  *Sets up svg window to preset size inside correct div.
  *TODO: change to scale with window size.
  */
@@ -13,16 +13,30 @@ let initSvg = () => {
 	svg.setAttribute("height", "400");
 }
 
+/**
+ *Function for reset button onclick.
+ *
+ *Re-generates svg elements (rect and text pairs) based on slider side.
+ *Will also re-enable the slider bar and start button if disabled.
+ *
+*/
 let resetSvg = () => {
 	//re-enable slider and start button
 	document.querySelector("#startBtn").disabled = false;
 	let slider = document.querySelector("#sizeSlider");
 	slider.disabled = false;
 
+	//re-generate svg elements
 	generateSvgElements(slider.value);
 }
 
-//document
+/**
+ * Main function that starts the program when the startBtn is clicked.
+ *
+ * Gets the current algorithm in the algorithm select element and the current
+ * 	rect and texts from the svg elements. Then compares and executes the algorithm
+ * 	selected from the algorithm select element.
+ */
 let startAlgorithm = async () => {
 	//constant text to compare to input alg type
 	const BUBBLE = "Bubble Sort";
@@ -31,7 +45,6 @@ let startAlgorithm = async () => {
 	const MERGE = "Merge Sort";
 	const QUICK = "Quick Sort";
 	const COMPARE_TRUE = 0;
-
 
 	//get select html element
 	const algSelect = document.querySelector("#algList");
@@ -46,9 +59,12 @@ let startAlgorithm = async () => {
 	if(INSERTION.localeCompare(alg) == COMPARE_TRUE){
 		insertionSort(rects, texts);
 	}
+	else if(QUICK.localeCompare(alg) == COMPARE_TRUE){
+		quickSort(rects, texts);
+	}
 }
 
-/*
+/**
  *Generates bar and text elements within svg.
  *
  *Uses svg window dimensions to create an array of bars and text representing
@@ -88,13 +104,19 @@ let generateSvgElements = (eleSize) => {
 	}
 }
 
-//TODO: document
-//Note gets text and rect elements in order
+/**
+ *Gets rects and texts found within svg element and returns them as 2 arrays.
+ *
+ *Called as [rects, texts] = getSortingElements() to generate 2 arrays.
+ *
+ *@return {array}		Returns 2 arrays, one of rects, one of texts.
+ */
+
 let getSortingElements = () => {
 	return [[...document.querySelectorAll('rect')], [...document.querySelectorAll('text')]];
 }
 
-/*
+/**
  *Swaps positioning of 2 bars (rect and text pair) on the svg element by
  * swaping the elements' transform attributes.
  *
@@ -102,8 +124,12 @@ let getSortingElements = () => {
  *@param 	{rect}		rect2: svg rectangle element to swap.
  *@param 	{text}		text1: svg text element to swap.
  *@param 	{text}		text2: svg text element to swap.
+ *
+ *@returns	{promise}	returns promis when completed to move to next step.
  */
 let swap = (rect1, rect2, text1, text2) => {
+	const timeout = 500 //timeout in ms
+
 	return new Promise((resolve) => {
 		let swaps = () => {
 			let temp1 = rect1.getAttribute('transform');
@@ -115,16 +141,18 @@ let swap = (rect1, rect2, text1, text2) => {
 			text2.setAttribute('transform', temp2);
 			resolve();
 		}
-		setTimeout(swaps, 500);
+		setTimeout(swaps, timeout);
 	});
 }
 
-/*
- *Creates a text element within svg window.
+/**
+ *Creates a text element for svg window.
  *
  *@param 	{int}		height: int representing the text value.
  *@param 	{int}		pos: int representing which bar the text belongs to and positioning.
  *@param 	{number}	width: decimal value represeting the width of the bar/text area.
+ *
+ *@returns	{SVG text}	returns svg text element for given inputs
  *TODO: change positioning to window size from static value
  */
 let createText = (height, pos, width) => {
@@ -142,15 +170,17 @@ let createText = (height, pos, width) => {
 	return text;
 }
 
-/*
- *Creates a rect element representing a bar within svg window.
+/**
+ *Creates a rect element representing a bar for svg window.
  *
  *@param 	{int}		height: int representing the text value.
  *@param 	{int}		pos: int representing which bar the text belongs to and positioning.
  *@param 	{number}	width: decimal value represeting the width of the bar/text area.
+ *
+ *@returns	{SVG rect}	returns svg rectangle element for given inputs
  *TODO: change positioning to window size from static value
  *TODO: change styling of bars
- */
+ **/
 let createRect = (height, pos, width) => {
 	//string for rect style
 	const style = "fill: white; stroke-width: 1; stroke: black";
@@ -173,14 +203,18 @@ let createRect = (height, pos, width) => {
  *
  *@param {svg element}	svg 	svg parameter to get width and height dimensions from.
  *
- *@return {array}		Returns 2 value array of [width, height] of inputed svg element.
+ *@return {array}		arr	Returns 2 value array of [width, height] of inputed svg element.
  */
 let getDim = (svg) => {
 	return [Number(svg.getAttribute("width")), Number(svg.getAttribute("height"))];
 }
 
 /**
- *Initializes size slider element to update text box when slid.
+ *Initializes size slider element.
+ *
+ *Sets up slider to update text box div to current slider value and
+ * update the svg window to have current slider values of svg text and
+ * svg rect elements.
  */
 let initSlider = () => {
 	const slider = document.querySelector("#sizeSlider");
