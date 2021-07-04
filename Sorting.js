@@ -1,10 +1,28 @@
 let quickSort = async(rects, texts, low=0, high=rects.length-1) => {
-	arr = []
-	let i;
-	for(i = 0; i < texts.length; i++){
-		arr.push(parseFloat(texts[i].textContent));
+	let pivot;
+	if(low < high) {
+		pivot = partition(rects, texts, low, high);
+		quickSort(rects, texts, low, pivot-1);
+		quickSort(rects, texts, pivot+1, high);
 	}
-	qs(arr);
+}
+
+let partition = (rects, texts, low, high) => {
+	let pivot, lowPtr, j; //j = loop iterator, lowPtr = position of lower than pivot
+	pivot = parseFloat(texts[high].textContent);
+	lowPtr = low - 1;
+	for(j = low; j < high; j++) {
+		if(parseFloat(texts[j].textContent) < pivot) {
+			lowPtr = lowPtr + 1;
+			swap(rects[lowPtr], rects[j], texts[lowPtr], texts[j]);
+			[rects[lowPtr], rects[j]] = [rects[j], rects[lowPtr]];
+			[texts[lowPtr], texts[j]] = [texts[j], texts[lowPtr]];
+		}
+	}
+	swap(rects[lowPtr+1], rects[high], texts[high], texts[lowPtr+1]);
+	[rects[lowPtr+1], rects[high]] = [rects[high], rects[lowPtr+1]];
+	[texts[lowPtr+1], texts[high]] = [texts[high], texts[lowPtr+1]];
+	return lowPtr + 1;
 }
 
 /**
