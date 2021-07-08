@@ -32,12 +32,23 @@ let m = (nums, left, middle, right) => {
 	}
 }*/
 
+/**
+ * Merge sort algorithm. Run when algorithm select box is on merge sort and start button is clicked.
+ *
+ * @param	{array}		rects: array of rect svg elements in the svg window in order of being created (
+ * 							order of unsorted elements).
+ * @param	{array}		texts: array of text svg elements in the svg window in order of being created (
+ * 							order of unsorted elements).
+ */
+ //TODO: add awaits
 let mergeSort = (rects, texts) => {
+	//array containing translations of rect svg objects
 	const translations = getTranslations(rects.length);
-	console.log(translations);
+	//run mergesort
 	mSort(rects, texts, 0, rects.length-1, translations);
 }
 
+//TODO: awaits
 let mSort = (rects, texts, leftPtr, rightPtr, translations) => {
 	if(leftPtr < rightPtr){
 		let middlePtr = Math.floor((leftPtr+rightPtr)/2);
@@ -47,6 +58,7 @@ let mSort = (rects, texts, leftPtr, rightPtr, translations) => {
 	}
 }
 
+//TODO: awaits, variable names
 let merge = (rects, texts, leftPtr, middlePtr, rightPtr, translations) => {
 	let idx;
 	let leftRect = [], rightRect = [], leftText = [], rightText = [];
@@ -65,13 +77,13 @@ let merge = (rects, texts, leftPtr, middlePtr, rightPtr, translations) => {
 	for(let i = leftPtr; i <= rightPtr; i++) {
 		let x, y;
 		if(l >= leftRect.length) {
-			x = 1000000000;
+			x = 1000000000; //arbitrary high number
 		}
 		else{
 			x = parseFloat(leftRect[l].getAttribute('height'));
 		}
 		if(r >= rightRect.length){
-			y = 1000000000;
+			y = 1000000000; //arbitrary high number
 		}
 		else{
 			y = parseFloat(rightRect[r].getAttribute('height'));
@@ -101,7 +113,21 @@ let heapSort = () => {
 	return;
 }
 
-//TODO: document
+/**
+ * Quick sort algorithm. Run when algorithm select box is on Quick sort and start button is clicked.
+ *
+ * Basic Quick sort using the text values found within the text svg elements to compare. Uses last element
+ * 	in texts array as a value to compare and re-orders array based on if elements are higher or lower than
+ *  that element. Elements higher go to the end of the array and then the algorithm is recursively run until
+ *  it's entirely sorted.
+ *
+ * @param	{array}		rects: array of rect svg elements in the svg window in order of being created (
+ * 							order of unsorted elements).
+ * @param	{array}		texts: array of text svg elements in the svg window in order of being created (
+ * 							order of unsorted elements).
+ * @param	{int}		low: minimum index for algorithm to examine. Default 0.
+ * @param	{int}		high: maximum index for algorithm to examine. Defaults to last index in array.
+ */
 let quickSort = async(rects, texts, low=0, high=rects.length-1) => {
 	let pivot;
 	if(low < high) {
@@ -111,7 +137,20 @@ let quickSort = async(rects, texts, low=0, high=rects.length-1) => {
 	}
 }
 
-//TODO: document
+/**
+ * Partition method for quicksort algorithm.
+ * 
+ * Algorithm used to partition array. Takes last element (pivot) and compares every other element to determine if
+ *  they are higher/lower than the element. Reorders so that elements lower are at the lower indexes and
+ * 	higher elements at higher indexes. Then swaps the pivot in between and returns that index.
+ * 
+ * @param	{array}		rects: array of rect svg elements in the svg window in order of being created (
+ * 							order of unsorted elements).
+ * @param	{array}		texts: array of text svg elements in the svg window in order of being created (
+ * 							order of unsorted elements).
+ * @param	{int}		low: minimum index for algorithm to examine.
+ * @param	{int}		high: maximum index for algorithm to examine.
+ */
 let partition = async (rects, texts, low, high) => {
 	let pivot, lowPtr, j; //j = loop iterator, lowPtr = position of lower than pivot
 	pivot = parseFloat(texts[high].textContent);
