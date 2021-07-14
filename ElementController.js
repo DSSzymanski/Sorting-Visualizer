@@ -179,7 +179,7 @@ let createRect = (height, pos, width) => {
 
 	//setup rect
 	rect.setAttribute('x', 0);
-	rect.setAttribute('y', 350-height);
+	rect.setAttribute('y', 400-height);
 	rect.setAttribute('width', width);
 	rect.setAttribute('height', height);
 	rect.setAttribute('style', style);
