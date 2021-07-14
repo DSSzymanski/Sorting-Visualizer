@@ -58,7 +58,7 @@ let mSort = (rects, texts, leftPtr, rightPtr, translations) => {
 	}
 }
 
-//TODO: awaits, variable names
+//TODO: awaits
 let merge = (rects, texts, leftPtr, middlePtr, rightPtr, translations) => {
 	let idx;
 	let leftRect = [], rightRect = [], leftText = [], rightText = [];
@@ -72,35 +72,35 @@ let merge = (rects, texts, leftPtr, middlePtr, rightPtr, translations) => {
 		rightText.push(texts[idx]);
 		rightRect.push(rects[idx]);
 	}
-	let l = 0;
-	let r = 0;
+	let leftIter = 0; //iterator for leftRect and leftText
+	let rightIter = 0; //iterator for rightRect and rightText
 	for(let i = leftPtr; i <= rightPtr; i++) {
 		let x, y;
-		if(l >= leftRect.length) {
+		if(leftIter >= leftRect.length) {
 			x = 1000000000; //arbitrary high number
 		}
 		else{
-			x = parseFloat(leftRect[l].getAttribute('height'));
+			x = parseFloat(leftRect[leftIter].getAttribute('height'));
 		}
-		if(r >= rightRect.length){
-			y = 1000000000; //arbitrary high number
+		if(rightIter >= rightRect.length){
+			y = 1000000000;
 		}
 		else{
-			y = parseFloat(rightRect[r].getAttribute('height'));
+			y = parseFloat(rightRect[rightIter].getAttribute('height'));
 		}
 		if(x < y){
-			leftRect[l].setAttribute('transform', translations[0][i]);
-			leftText[l].setAttribute('transform', translations[1][i]);
-			rects[i] = leftRect[l];
-			texts[i] = leftText[l];
-			l += 1;
+			leftRect[leftIter].setAttribute('transform', translations[0][i]);
+			leftText[leftIter].setAttribute('transform', translations[1][i]);
+			rects[i] = leftRect[leftIter];
+			texts[i] = leftText[leftIter];
+			leftIter += 1;
 		}
 		else{
-			rightRect[r].setAttribute('transform', translations[0][i]);
-			rightText[r].setAttribute('transform', translations[1][i]);
-			rects[i] = rightRect[r];
-			texts[i] = rightText[r];
-			r += 1;
+			rightRect[rightIter].setAttribute('transform', translations[0][i]);
+			rightText[rightIter].setAttribute('transform', translations[1][i]);
+			rects[i] = rightRect[rightIter];
+			texts[i] = rightText[rightIter];
+			rightIter += 1;
 		}
 	}
 }
