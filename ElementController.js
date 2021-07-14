@@ -95,7 +95,7 @@ let generateSvgElements = (eleSize) => {
 	
 	//constant used for sizing bars into equal heights based on svg window
 	//TODO: change for variable window size 
-	const height = 350/eleSize;
+	const height = 400/eleSize;
 	
 	//randomize order of numbers used to generate rect/text values
 	let nums = [];
