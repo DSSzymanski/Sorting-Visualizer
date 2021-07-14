@@ -53,19 +53,27 @@ let startAlgorithm = async () => {
 	document.querySelector("#sizeSlider").disabled = true;
 
 	//get elements in svg
-	let [rects, texts] = getSortingElements();
+	let rects = getSortingElements();
 	//get and run algorithm chosen
 	const alg = algSelect.options[algSelect.selectedIndex].text;
 	if(INSERTION.localeCompare(alg) == COMPARE_TRUE){
-		insertionSort(rects, texts);
+		insertionSort(rects);
 	}
 	else if(QUICK.localeCompare(alg) == COMPARE_TRUE){
-		quickSort(rects, texts);
+		quickSort(rects);
+	}
+	else if(MERGE.localeCompare(alg) == COMPARE_TRUE){
+		let nums = [];
+		for(let i = 3; i >= 0; i--){
+			nums.push(i);
+		}
+		//mergeSort(nums);
+		mergeSort(rects);
 	}
 }
 
 /**
- *Generates bar and text elements within svg.
+ *Generates rect elements within svg.
  *
  *Uses svg window dimensions to create an array of bars and text representing
  *	equally spaced bars to sort through.
@@ -80,7 +88,7 @@ let generateSvgElements = (eleSize) => {
 	svg.querySelectorAll('*').forEach(element => element.remove());
 
 	//gets dimentions of svg in [width, height] format
-	svgDim = getDim(svg);
+	const svgDim = getDim(svg);
 
 	//constant to be used for the width of each bar
 	const width = svgDim[0]/eleSize;
@@ -97,37 +105,48 @@ let generateSvgElements = (eleSize) => {
 	nums = nums.sort(() => Math.random() - 0.5);
 	
 	for(let i = 1; i <= eleSize; i++) {
-		text = createText(nums[i-1], i, width);
-		svg.appendChild(text);
 		rect = createRect(nums[i-1], i-1, width);
 		svg.appendChild(rect);
 	}
 }
 
-/**
- *Gets rects and texts found within svg element and returns them as 2 arrays.
- *
- *Called as [rects, texts] = getSortingElements() to generate 2 arrays.
- *
- *@return {array}		Returns 2 arrays, one of rects, one of texts.
- */
+let placeElement = (element) => {
 
-let getSortingElements = () => {
-	return [[...document.querySelectorAll('rect')], [...document.querySelectorAll('text')]];
+}
+
+let hideElement = (rect) => {
+	rect.setAttribute('transform', 'translate(' + -100 + ')');
+}
+
+let getTranslations = (length) => {
+	const width = getDim(document.querySelector("#sortingDisplaySvg"))[0]/length;
+	let rectTranslations = [];
+	for(let i = 0; i <= length; i++) {
+		rectTranslations.push('translate(' + i*width + ')');
+	}
+	return rectTranslations;
 }
 
 /**
- *Swaps positioning of 2 bars (rect and text pair) on the svg element by
+ *Gets rects found within svg element and returns them as array.
+ *
+ *@return {array}		Returns array of rects.
+ */
+
+let getSortingElements = () => {
+	return [...document.querySelectorAll('rect')];
+}
+
+/**
+ *Swaps positioning of rects on the svg element by
  * swaping the elements' transform attributes.
  *
  *@param 	{rect}		rect1: svg rectangle element to swap.
  *@param 	{rect}		rect2: svg rectangle element to swap.
- *@param 	{text}		text1: svg text element to swap.
- *@param 	{text}		text2: svg text element to swap.
  *
  *@returns	{promise}	returns promis when completed to move to next step.
  */
-let swap = (rect1, rect2, text1, text2) => {
+let swap = (rect1, rect2) => {
 	const timeout = 500 //timeout in ms
 
 	return new Promise((resolve) => {
@@ -135,39 +154,10 @@ let swap = (rect1, rect2, text1, text2) => {
 			let temp1 = rect1.getAttribute('transform');
 			rect1.setAttribute('transform', rect2.getAttribute('transform'));
 			rect2.setAttribute('transform', temp1);
-
-			let temp2 = text1.getAttribute('transform');
-			text1.setAttribute('transform', text2.getAttribute('transform'));
-			text2.setAttribute('transform', temp2);
 			resolve();
 		}
 		setTimeout(swaps, timeout);
 	});
-}
-
-/**
- *Creates a text element for svg window.
- *
- *@param 	{int}		height: int representing the text value.
- *@param 	{int}		pos: int representing which bar the text belongs to and positioning.
- *@param 	{number}	width: decimal value represeting the width of the bar/text area.
- *
- *@returns	{SVG text}	returns svg text element for given inputs
- *TODO: change positioning to window size from static value
- */
-let createText = (height, pos, width) => {
-	//string for rotating text 90 degrees
-	const rotation = "rotate(90, " +(pos-.5)*width + ", 375)";
-	let text = document.createElementNS("http://www.w3.org/2000/svg", 'text');
-	const translate = 'translate(' + (pos-.75)*width + ')';
-	
-	//setup text element
-	text.setAttribute('x', 0);
-	text.setAttribute('y', 380);
-	text.setAttribute('transform', rotation + " " + translate);
-	text.textContent = height;
-	
-	return text;
 }
 
 /**
