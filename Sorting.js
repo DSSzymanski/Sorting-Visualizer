@@ -59,7 +59,7 @@ let mSort = (rects, texts, leftPtr, rightPtr, translations) => {
 }
 
 //TODO: awaits
-let merge = (rects, texts, leftPtr, middlePtr, rightPtr, translations) => {
+let merge = async(rects, texts, leftPtr, middlePtr, rightPtr, translations) => {
 	let idx;
 	let leftRect = [], rightRect = [], leftText = [], rightText = [];
 	for(idx = leftPtr; idx <= middlePtr; idx++) {
@@ -75,20 +75,9 @@ let merge = (rects, texts, leftPtr, middlePtr, rightPtr, translations) => {
 	let leftIter = 0; //iterator for leftRect and leftText
 	let rightIter = 0; //iterator for rightRect and rightText
 	for(let i = leftPtr; i <= rightPtr; i++) {
-		let x, y;
-		if(leftIter >= leftRect.length) {
-			x = 1000000000; //arbitrary high number
-		}
-		else{
-			x = parseFloat(leftRect[leftIter].getAttribute('height'));
-		}
-		if(rightIter >= rightRect.length){
-			y = 1000000000;
-		}
-		else{
-			y = parseFloat(rightRect[rightIter].getAttribute('height'));
-		}
-		if(x < y){
+		let leftPos = (leftIter >= leftRect.length) ? 1000000000 : parseFloat(leftRect[leftIter].getAttribute('height'));
+		let rightPos = (rightIter >= rightRect.length) ? 1000000000 : parseFloat(rightRect[rightIter].getAttribute('height'));
+		if(leftPos < rightPos){
 			leftRect[leftIter].setAttribute('transform', translations[0][i]);
 			leftText[leftIter].setAttribute('transform', translations[1][i]);
 			rects[i] = leftRect[leftIter];
