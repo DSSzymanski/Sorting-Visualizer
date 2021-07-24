@@ -63,11 +63,6 @@ let startAlgorithm = async () => {
 		quickSort(rects);
 	}
 	else if(MERGE.localeCompare(alg) == COMPARE_TRUE){
-		let nums = [];
-		for(let i = 3; i >= 0; i--){
-			nums.push(i);
-		}
-		//mergeSort(nums);
 		mergeSort(rects);
 	}
 }
@@ -99,23 +94,67 @@ let generateSvgElements = (eleSize) => {
 	
 	//randomize order of numbers used to generate rect/text values
 	let nums = [];
+	
 	for(let i = 1; i <= eleSize; i++) {
 		nums.push(height*i);
 	}
 	nums = nums.sort(() => Math.random() - 0.5);
-	
+	/*
+	for(let i = eleSize; i >= 0; i--){
+		nums.push(height*i);
+	}
+	*/
 	for(let i = 1; i <= eleSize; i++) {
 		rect = createRect(nums[i-1], i-1, width);
 		svg.appendChild(rect);
 	}
 }
 
-let placeElement = (element) => {
+let replaceElement = (rect, translation) => {
+	const timeout = 500 //timeout in ms
 
+	return new Promise((resolve) => {
+		let recolor = () => {
+			const fill = 'fill: white; '
+			const stroke = 'stroke: black; stroke-width: 1; ';
+			rect.setAttribute('style', fill + stroke);
+			rect.setAttribute('transform', translation);
+			resolve();
+		}
+		setTimeout(recolor, timeout);
+	});
+}
+	
+
+let colorElement = (rect, color) => {
+	const timeout = 500 //timeout in ms
+
+	return new Promise((resolve) => {
+		let colorRect = () => {
+			const fill = 'fill: ' + color + '; ';
+			const stroke = 'stroke: black; stroke-width: 1; ';
+			rect.setAttribute('style', fill + stroke);
+			resolve();
+		}
+		setTimeout(colorRect, timeout);
+	});
 }
 
-let hideElement = (rect) => {
-	rect.setAttribute('transform', 'translate(' + -100 + ')');
+let hideElement = async(rect) => {
+	await colorElement(rect, 'red');
+	await moveElement(rect);
+}
+
+let moveElement = (rect) => {
+	const timeout = 500 //timeout in ms
+
+	return new Promise((resolve) => {
+		let swaps = () => {
+			rect.setAttribute('transform', 'translate(' + -100 + ')');
+			resolve();
+		}
+		setTimeout(swaps, timeout);
+	});
 }
 
 let getTranslations = (length) => {

@@ -38,7 +38,6 @@ let m = (nums, left, middle, right) => {
  * @param	{array}		rects: array of rect svg elements in the svg window in order of being created (
  * 							order of unsorted elements).
  */
- //TODO: add awaits
 let mergeSort = (rects) => {
 	//array containing translations of rect svg objects
 	const translations = getTranslations(rects.length);
@@ -46,26 +45,25 @@ let mergeSort = (rects) => {
 	mSort(rects, 0, rects.length-1, translations);
 }
 
-//TODO: awaits
-let mSort = (rects, leftPtr, rightPtr, translations) => {
+let mSort = async(rects, leftPtr, rightPtr, translations) => {
 	if(leftPtr < rightPtr){
 		let middlePtr = Math.floor((leftPtr+rightPtr)/2);
-		mSort(rects, leftPtr, middlePtr, translations);
-		mSort(rects, middlePtr+1, rightPtr, translations);
-		merge(rects, leftPtr, middlePtr, rightPtr, translations);
+		await mSort(rects, leftPtr, middlePtr, translations);
+		await mSort(rects, middlePtr+1, rightPtr, translations);
+		await merge(rects, leftPtr, middlePtr, rightPtr, translations);
 	}
+	return Promise.resolve();
 }
 
-//TODO: awaits
 let merge = async(rects, leftPtr, middlePtr, rightPtr, translations) => {
 	let idx;
 	let leftRect = [], rightRect = [];
 	for(idx = leftPtr; idx <= middlePtr; idx++) {
-		hideElement(rects[idx]);
+		await hideElement(rects[idx]);
 		leftRect.push(rects[idx]);
 	}
 	for(idx = middlePtr+1; idx <= rightPtr; idx++){
-		hideElement(rects[idx]);
+		await hideElement(rects[idx]);
 		rightRect.push(rects[idx]);
 	}
 	let leftIter = 0; //iterator for leftRect
@@ -74,16 +72,17 @@ let merge = async(rects, leftPtr, middlePtr, rightPtr, translations) => {
 		let leftPos = (leftIter >= leftRect.length) ? 1000000000 : parseFloat(leftRect[leftIter].getAttribute('height'));
 		let rightPos = (rightIter >= rightRect.length) ? 1000000000 : parseFloat(rightRect[rightIter].getAttribute('height'));
 		if(leftPos < rightPos){
-			leftRect[leftIter].setAttribute('transform', translations[i]);
+			await replaceElement(leftRect[leftIter], translations[i]);
 			rects[i] = leftRect[leftIter];
 			leftIter += 1;
 		}
 		else{
-			rightRect[rightIter].setAttribute('transform', translations[i]);
+			await replaceElement(rightRect[rightIter], translations[i]);
 			rects[i] = rightRect[rightIter];
 			rightIter += 1;
 		}
 	}
+	return Promise.resolve();
 }
 
 let bubbleSort = () => {
