@@ -53,19 +53,22 @@ let startAlgorithm = async () => {
 	document.querySelector("#sizeSlider").disabled = true;
 
 	//get elements in svg
-	let [rects, texts] = getSortingElements();
+	let rects = getSortingElements();
 	//get and run algorithm chosen
 	const alg = algSelect.options[algSelect.selectedIndex].text;
 	if(INSERTION.localeCompare(alg) == COMPARE_TRUE){
-		insertionSort(rects, texts);
+		insertionSort(rects);
 	}
 	else if(QUICK.localeCompare(alg) == COMPARE_TRUE){
-		quickSort(rects, texts);
+		quickSort(rects);
+	}
+	else if(MERGE.localeCompare(alg) == COMPARE_TRUE){
+		mergeSort(rects);
 	}
 }
 
 /**
- *Generates bar and text elements within svg.
+ *Generates rect elements within svg.
  *
  *Uses svg window dimensions to create an array of bars and text representing
  *	equally spaced bars to sort through.
@@ -80,54 +83,109 @@ let generateSvgElements = (eleSize) => {
 	svg.querySelectorAll('*').forEach(element => element.remove());
 
 	//gets dimentions of svg in [width, height] format
-	svgDim = getDim(svg);
+	const svgDim = getDim(svg);
 
 	//constant to be used for the width of each bar
 	const width = svgDim[0]/eleSize;
 	
 	//constant used for sizing bars into equal heights based on svg window
 	//TODO: change for variable window size 
-	const height = 350/eleSize;
+	const height = 400/eleSize;
 	
 	//randomize order of numbers used to generate rect/text values
 	let nums = [];
+	
 	for(let i = 1; i <= eleSize; i++) {
 		nums.push(height*i);
 	}
 	nums = nums.sort(() => Math.random() - 0.5);
-	
+	/*
+	for(let i = eleSize; i >= 0; i--){
+		nums.push(height*i);
+	}
+	*/
 	for(let i = 1; i <= eleSize; i++) {
-		text = createText(nums[i-1], i, width);
-		svg.appendChild(text);
 		rect = createRect(nums[i-1], i-1, width);
 		svg.appendChild(rect);
 	}
 }
 
-/**
- *Gets rects and texts found within svg element and returns them as 2 arrays.
- *
- *Called as [rects, texts] = getSortingElements() to generate 2 arrays.
- *
- *@return {array}		Returns 2 arrays, one of rects, one of texts.
- */
+let replaceElement = (rect, translation) => {
+	const timeout = 500 //timeout in ms
 
-let getSortingElements = () => {
-	return [[...document.querySelectorAll('rect')], [...document.querySelectorAll('text')]];
+	return new Promise((resolve) => {
+		let recolor = () => {
+			const fill = 'fill: white; '
+			const stroke = 'stroke: black; stroke-width: 1; ';
+			rect.setAttribute('style', fill + stroke);
+			rect.setAttribute('transform', translation);
+			resolve();
+		}
+		setTimeout(recolor, timeout);
+	});
+}
+	
+
+let colorElement = (rect, color) => {
+	const timeout = 500 //timeout in ms
+
+	return new Promise((resolve) => {
+		let colorRect = () => {
+			const fill = 'fill: ' + color + '; ';
+			const stroke = 'stroke: black; stroke-width: 1; ';
+			rect.setAttribute('style', fill + stroke);
+			resolve();
+		}
+		setTimeout(colorRect, timeout);
+	});
+}
+
+let hideElement = async(rect) => {
+	await colorElement(rect, 'red');
+	await moveElement(rect);
+}
+
+let moveElement = (rect) => {
+	const timeout = 500 //timeout in ms
+
+	return new Promise((resolve) => {
+		let swaps = () => {
+			rect.setAttribute('transform', 'translate(' + -100 + ')');
+			resolve();
+		}
+		setTimeout(swaps, timeout);
+	});
+}
+
+let getTranslations = (length) => {
+	const width = getDim(document.querySelector("#sortingDisplaySvg"))[0]/length;
+	let rectTranslations = [];
+	for(let i = 0; i <= length; i++) {
+		rectTranslations.push('translate(' + i*width + ')');
+	}
+	return rectTranslations;
 }
 
 /**
- *Swaps positioning of 2 bars (rect and text pair) on the svg element by
+ *Gets rects found within svg element and returns them as array.
+ *
+ *@return {array}		Returns array of rects.
+ */
+
+let getSortingElements = () => {
+	return [...document.querySelectorAll('rect')];
+}
+
+/**
+ *Swaps positioning of rects on the svg element by
  * swaping the elements' transform attributes.
  *
  *@param 	{rect}		rect1: svg rectangle element to swap.
  *@param 	{rect}		rect2: svg rectangle element to swap.
- *@param 	{text}		text1: svg text element to swap.
- *@param 	{text}		text2: svg text element to swap.
  *
  *@returns	{promise}	returns promis when completed to move to next step.
  */
-let swap = (rect1, rect2, text1, text2) => {
+let swap = (rect1, rect2) => {
 	const timeout = 500 //timeout in ms
 
 	return new Promise((resolve) => {
@@ -135,39 +193,10 @@ let swap = (rect1, rect2, text1, text2) => {
 			let temp1 = rect1.getAttribute('transform');
 			rect1.setAttribute('transform', rect2.getAttribute('transform'));
 			rect2.setAttribute('transform', temp1);
-
-			let temp2 = text1.getAttribute('transform');
-			text1.setAttribute('transform', text2.getAttribute('transform'));
-			text2.setAttribute('transform', temp2);
 			resolve();
 		}
 		setTimeout(swaps, timeout);
 	});
-}
-
-/**
- *Creates a text element for svg window.
- *
- *@param 	{int}		height: int representing the text value.
- *@param 	{int}		pos: int representing which bar the text belongs to and positioning.
- *@param 	{number}	width: decimal value represeting the width of the bar/text area.
- *
- *@returns	{SVG text}	returns svg text element for given inputs
- *TODO: change positioning to window size from static value
- */
-let createText = (height, pos, width) => {
-	//string for rotating text 90 degrees
-	const rotation = "rotate(90, " +(pos-.5)*width + ", 375)";
-	let text = document.createElementNS("http://www.w3.org/2000/svg", 'text');
-	const translate = 'translate(' + (pos-.75)*width + ')';
-	
-	//setup text element
-	text.setAttribute('x', 0);
-	text.setAttribute('y', 380);
-	text.setAttribute('transform', rotation + " " + translate);
-	text.textContent = height;
-	
-	return text;
 }
 
 /**
@@ -189,7 +218,7 @@ let createRect = (height, pos, width) => {
 
 	//setup rect
 	rect.setAttribute('x', 0);
-	rect.setAttribute('y', 350-height);
+	rect.setAttribute('y', 400-height);
 	rect.setAttribute('width', width);
 	rect.setAttribute('height', height);
 	rect.setAttribute('style', style);
