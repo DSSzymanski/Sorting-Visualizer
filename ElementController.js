@@ -99,24 +99,31 @@ let generateSvgElements = (eleSize) => {
 		nums.push(height*i);
 	}
 	nums = nums.sort(() => Math.random() - 0.5);
-	/*
-	for(let i = eleSize; i >= 0; i--){
-		nums.push(height*i);
-	}
-	*/
+
 	for(let i = 1; i <= eleSize; i++) {
 		rect = createRect(nums[i-1], i-1, width);
 		svg.appendChild(rect);
 	}
 }
 
+/**
+ * Returns rect svg element to it's translation position after it has been moved off screen.
+ * 	Timeout to space out events for viewing individual steps. 
+ * 
+ * @param 	{svg rect}		rect: current svg rect object to be brought back on screen.
+ * @param 	{string}		translation: string representing the css translation used for the rect based on
+ * 										 it's array position.
+ * 
+ * @return 	{promise}		returns promise when completed to have outer function resume.
+ * 
+ */
 let replaceElement = (rect, translation) => {
 	const timeout = 500 //timeout in ms
 
 	return new Promise((resolve) => {
 		let recolor = () => {
-			const fill = 'fill: white; '
-			const stroke = 'stroke: black; stroke-width: 1; ';
+			const fill = 'fill: white; ' //css fill styling
+			const stroke = 'stroke: black; stroke-width: 1; '; //css stroke styling
 			rect.setAttribute('style', fill + stroke);
 			rect.setAttribute('transform', translation);
 			resolve();
@@ -125,7 +132,15 @@ let replaceElement = (rect, translation) => {
 	});
 }
 	
-
+/**
+ * colorElement is called to set an inputed svg rect's fill to inputed color.
+ * 
+ * @param 	{svg rect}		rect: current svg rect object to be brought back on screen.
+ * @param 	{string}		color: can be html color string (e.g. 'red') or a hex color code
+ * 								   (e.g. '#FFFFFF').
+ * 
+ * @return 	{promise}		returns promise when completed to have outer function resume.
+ */
 let colorElement = (rect, color) => {
 	const timeout = 500 //timeout in ms
 
@@ -140,11 +155,26 @@ let colorElement = (rect, color) => {
 	});
 }
 
+/**
+ * Function used within merge sort when rect svg objects are colored for moving and
+ * 		moved off screen. Color can be changed from within the colorElement function
+ * 		call.
+ * 
+ * @param 	{svg rect}	rect: rect object to be moved.
+ */
 let hideElement = async(rect) => {
-	await colorElement(rect, 'red');
-	await moveElement(rect);
+	await colorElement(rect, 'red'); //color for moving off screen
+	await moveElement(rect); //move off screen
 }
 
+/**
+ * Function used to move svg rect off the svg window. Sets translation of rect to
+ * -100 and returns a promise.
+ * 
+ * @param 	{svg rect}	rect: svg rect to be moved off the svg window.
+ * 
+ * @returns {promise}	returns promise when completed to have outer function resume.
+ */
 let moveElement = (rect) => {
 	const timeout = 500 //timeout in ms
 
@@ -157,6 +187,14 @@ let moveElement = (rect) => {
 	});
 }
 
+
+/**
+ * Searches Dom for all svg objects and returns the transformation strings in an array in order.
+ * 
+ * @param 	{int}	length: amount of rects in svg.
+ * 
+ * @returns {array}	returns array of strings representing css transformations.
+ */
 let getTranslations = (length) => {
 	const width = getDim(document.querySelector("#sortingDisplaySvg"))[0]/length;
 	let rectTranslations = [];

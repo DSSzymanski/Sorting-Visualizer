@@ -1,39 +1,5 @@
-/*
-let mergeSort = (nums, left=0, right=nums.length-1) => {
-	if(left < right) {
-		let middle = Math.floor((left+right)/2);
-		mergeSort(nums, left, middle);
-		mergeSort(nums, middle+1, right);
-		m(nums, left, middle, right);
-	}
-}
-
-let m = (nums, left, middle, right) => {
-	let idx;
-	let l = [], r = [];
-	for(idx = left; idx <= middle; idx++) {
-		l.push(nums[idx]);
-	}
-	l.push(75);
-	for(idx = middle+1; idx <= right; idx++){
-		r.push(nums[idx]);
-	}
-	r.push(75);
-	let x = 0, y = 0;
-	for(idx = left; idx <= right; idx++){
-		if(l[x] < r[y]){
-			nums[idx] = l[x];
-			x+=1;
-		}
-		else{
-			nums[idx] = r[y];
-			y+= 1;
-		}
-	}
-}*/
-
 /**
- * Merge sort algorithm. Run when algorithm select box is on merge sort and start button is clicked.
+ * Function called to run merge sort algorithm on inputed array of rect objects.
  *
  * @param	{array}		rects: array of rect svg elements in the svg window in order of being created (
  * 							order of unsorted elements).
@@ -42,26 +8,52 @@ let mergeSort = (rects) => {
 	//array containing translations of rect svg objects
 	const translations = getTranslations(rects.length);
 	//run mergesort
-	mSort(rects, 0, rects.length-1, translations);
+	mergeSortAlgorithm(rects, 0, rects.length-1, translations);
 }
 
-let mSort = async(rects, leftPtr, rightPtr, translations) => {
+/**
+ * Main recursive mergeSort algorithm. Divides array of rects until they are individual elements then
+ * 	compares and merges them back into their sorted place.
+ * 
+ * @param 	{array}		rects: array of rect svg elements in the svg window in order of being created (
+ * 							order of unsorted elements).
+ * @param	{int}		leftPtr: int representing the left range position of the rects array to be used.
+ * @param 	{int}		rightPtr: int representing the right range position of the rects array to be used.
+ * @param 	{array} 	translations: array of strings representing the css translation used for each array position.
+ * 
+ * @return {promise}	returns a promise when the portion of the array is sorted to move on to the next step.
+ */
+let mergeSortAlgorithm = async(rects, leftPtr, rightPtr, translations) => {
 	if(leftPtr < rightPtr){
 		let middlePtr = Math.floor((leftPtr+rightPtr)/2);
-		await mSort(rects, leftPtr, middlePtr, translations);
-		await mSort(rects, middlePtr+1, rightPtr, translations);
+		await mergeSortAlgorithm(rects, leftPtr, middlePtr, translations);
+		await mergeSortAlgorithm(rects, middlePtr+1, rightPtr, translations);
 		await merge(rects, leftPtr, middlePtr, rightPtr, translations);
 	}
 	return Promise.resolve();
 }
 
+/**
+ * Merge component of merge sort algorithm. Moves elements out of array and repositions them based on their
+ * sorted order.
+ * 
+ * @param 	{array}		rects: array of rect svg elements in the svg window in order of being created (
+ * 							order of unsorted elements).
+ * @param	{int}		leftPtr: int representing the left range position of the rects array to be used.
+ * @param 	{int}		rightPtr: int representing the right range position of the rects array to be used.
+ * @param 	{array} 	translations: array of strings representing the css translation used for each array position.
+ * 
+ * @return {promise}	returns a promise when the portion of the array is sorted to move on to the next step.
+ */
 let merge = async(rects, leftPtr, middlePtr, rightPtr, translations) => {
-	let idx;
+	let idx; //index used for iterating over rect array
 	let leftRect = [], rightRect = [];
+	//move left side of array off the svg element and store for sorting
 	for(idx = leftPtr; idx <= middlePtr; idx++) {
 		await hideElement(rects[idx]);
 		leftRect.push(rects[idx]);
 	}
+	//move right side of array off svg element and store for sorting
 	for(idx = middlePtr+1; idx <= rightPtr; idx++){
 		await hideElement(rects[idx]);
 		rightRect.push(rects[idx]);
@@ -69,13 +61,16 @@ let merge = async(rects, leftPtr, middlePtr, rightPtr, translations) => {
 	let leftIter = 0; //iterator for leftRect
 	let rightIter = 0; //iterator for rightRect
 	for(let i = leftPtr; i <= rightPtr; i++) {
+		//get left and right values, arbitrary high value if none left
 		let leftPos = (leftIter >= leftRect.length) ? 1000000000 : parseFloat(leftRect[leftIter].getAttribute('height'));
 		let rightPos = (rightIter >= rightRect.length) ? 1000000000 : parseFloat(rightRect[rightIter].getAttribute('height'));
+		//if left side is smaller, add left side and return to svg element
 		if(leftPos < rightPos){
 			await replaceElement(leftRect[leftIter], translations[i]);
 			rects[i] = leftRect[leftIter];
 			leftIter += 1;
 		}
+		//if right side is smaller, add left side and return to svg element
 		else{
 			await replaceElement(rightRect[rightIter], translations[i]);
 			rects[i] = rightRect[rightIter];
@@ -126,6 +121,8 @@ let quickSort = async(rects, low=0, high=rects.length-1) => {
  * 							order of unsorted elements).
  * @param	{int}		low: minimum index for algorithm to examine.
  * @param	{int}		high: maximum index for algorithm to examine.
+ * 
+ * @returns {promise, int}	returns promise and int representing where in the pivot point in the array lies.
  */
 let partition = async (rects, low, high) => {
 	let pivot, lowPtr, j; //j = loop iterator, lowPtr = position of lower than pivot
