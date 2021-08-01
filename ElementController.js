@@ -65,6 +65,9 @@ let startAlgorithm = async () => {
 	else if(MERGE.localeCompare(alg) == COMPARE_TRUE){
 		mergeSort(rects);
 	}
+	else if(BUBBLE.localeCompare(alg) == COMPARE_TRUE){
+		bubbleSort(rects);
+	}
 }
 
 /**

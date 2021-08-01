@@ -80,8 +80,25 @@ let merge = async(rects, leftPtr, middlePtr, rightPtr, translations) => {
 	return Promise.resolve();
 }
 
-let bubbleSort = () => {
-	return;
+/**
+ * Basic bubble sort algorithm. Brings elements from end of the inputted array to the front of the array.
+ * Compares element to element in place before it and swaps if it is less.
+ * 
+ * @param 	{array}		rects: array of rect svg elements in the svg window in order of being created (
+ * 							order of unsorted elements).
+ */
+let bubbleSort = async(rects) => {
+	//array containing translations of rect svg objects
+	const translations = getTranslations(rects.length);
+	
+	for(let i = 0; i < rects.length-1; i++) {
+		for(let j = rects.length-1; j > i; j--) {
+			if(parseInt(rects[j].getAttribute('height')) < parseInt(rects[j-1].getAttribute('height'))){
+				await swap(rects[j], rects[j-1]);
+				[rects[j], rects[j-1]] = [rects[j-1], rects[j]];
+			}
+		}
+	}
 }
 
 let heapSort = () => {
