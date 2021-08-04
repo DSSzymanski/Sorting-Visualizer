@@ -90,13 +90,17 @@ let merge = async(rects, leftPtr, middlePtr, rightPtr, translations) => {
 let bubbleSort = async(rects) => {
 	//array containing translations of rect svg objects
 	const translations = getTranslations(rects.length);
-	
+
 	for(let i = 0; i < rects.length-1; i++) {
 		for(let j = rects.length-1; j > i; j--) {
+			//color rects to indicate rects being checked
+			await colorMultiEle([rects[j], rects[j-1]],'yellow');
 			if(parseInt(rects[j].getAttribute('height')) < parseInt(rects[j-1].getAttribute('height'))){
 				await swap(rects[j], rects[j-1]);
 				[rects[j], rects[j-1]] = [rects[j-1], rects[j]];
 			}
+			//color rects to normal color
+			await colorMultiEle([rects[j], rects[j-1]],'white');
 		}
 	}
 }
