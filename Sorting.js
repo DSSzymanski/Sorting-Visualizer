@@ -1,3 +1,6 @@
+const CHANGE_COLOR = 'yellow';
+const NORMAL_COLOR = 'white';
+
 /**
  * Function called to run merge sort algorithm on inputed array of rect objects.
  *
@@ -94,13 +97,13 @@ let bubbleSort = async(rects) => {
 	for(let i = 0; i < rects.length-1; i++) {
 		for(let j = rects.length-1; j > i; j--) {
 			//color rects to indicate rects being checked
-			await colorMultiEle([rects[j], rects[j-1]],'yellow');
+			await colorMultiEle([rects[j], rects[j-1]], CHANGE_COLOR);
 			if(parseInt(rects[j].getAttribute('height')) < parseInt(rects[j-1].getAttribute('height'))){
 				await swap(rects[j], rects[j-1]);
 				[rects[j], rects[j-1]] = [rects[j-1], rects[j]];
 			}
 			//color rects to normal color
-			await colorMultiEle([rects[j], rects[j-1]],'white');
+			await colorMultiEle([rects[j], rects[j-1]], NORMAL_COLOR);
 		}
 	}
 }
@@ -185,8 +188,13 @@ let insertionSort = async(rects) => {
 		key = parseFloat(rects[currRectIdx].getAttribute('height'));
 		compRectIdx = currRectIdx-1;
 		while(compRectIdx >= 0 && key < parseFloat(rects[compRectIdx].getAttribute('height'))) {
+			//color rects indicating position change
+			await colorMultiEle([rects[compRectIdx], rects[compRectIdx+1]], CHANGE_COLOR);
 			//swaps translation of rects
 			await swap(rects[compRectIdx], rects[compRectIdx+1]);
+			//color rects indicating return to normal
+			await colorMultiEle([rects[compRectIdx], rects[compRectIdx+1]], NORMAL_COLOR);
+
 			//swap array positioning withing rects
 			[rects[compRectIdx], rects[compRectIdx+1]] = [rects[compRectIdx+1], rects[compRectIdx]];
 
