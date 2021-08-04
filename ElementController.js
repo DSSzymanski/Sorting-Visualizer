@@ -9,7 +9,7 @@ let init = () => {
  */
 let initSvg = () => {
 	const svg = document.querySelector("#sortingDisplaySvg");
-	svg.setAttribute("width", "1000");
+	svg.setAttribute("width", "500");
 	svg.setAttribute("height", "400");
 }
 
@@ -64,6 +64,9 @@ let startAlgorithm = async () => {
 	}
 	else if(MERGE.localeCompare(alg) == COMPARE_TRUE){
 		mergeSort(rects);
+	}
+	else if(BUBBLE.localeCompare(alg) == COMPARE_TRUE){
+		bubbleSort(rects);
 	}
 }
 
@@ -156,6 +159,29 @@ let colorElement = (rect, color) => {
 }
 
 /**
+ * colorElement is called to set an inputed array of svg rects fill to inputed color.
+ * 
+ * @param 	{array}			rects: array of svg rect objects to be colored.
+ * @param 	{string}		color: can be html color string (e.g. 'red') or a hex color code
+ * 								   (e.g. '#FFFFFF').
+ * 
+ * @return 	{promise}		returns promise when completed to have outer function resume.
+ */
+let colorMultiEle = (rects, color) => {
+	const timeout = 500 //timeout in ms
+
+	return new Promise((resolve) => {
+		let colorRect = () => {
+			const fill = 'fill: ' + color + '; ';
+			const stroke = 'stroke: black; stroke-width: 1; ';
+			rects.forEach(rect => rect.setAttribute('style', fill + stroke));
+			resolve();
+		}
+		setTimeout(colorRect, timeout);
+	});
+}
+
+/**
  * Function used within merge sort when rect svg objects are colored for moving and
  * 		moved off screen. Color can be changed from within the colorElement function
  * 		call.
@@ -235,6 +261,15 @@ let swap = (rect1, rect2) => {
 		}
 		setTimeout(swaps, timeout);
 	});
+}
+
+let createNewSVG = () => {
+	const svgDiv = document.querySelector("#svgContainer");
+	let svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+	svg.setAttribute("width", "500");
+	svg.setAttribute("height", "400");
+	svg.setAttribute("id", "extraDisplaySVG");
+	svgDiv.appendChild(svg);
 }
 
 /**

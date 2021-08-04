@@ -1,3 +1,6 @@
+const CHANGE_COLOR = 'yellow';
+const NORMAL_COLOR = 'white';
+
 /**
  * Function called to run merge sort algorithm on inputed array of rect objects.
  *
@@ -7,6 +10,10 @@
 let mergeSort = (rects) => {
 	//array containing translations of rect svg objects
 	const translations = getTranslations(rects.length);
+
+	//add extra svg for showing comparisons
+	createNewSVG();
+
 	//run mergesort
 	mergeSortAlgorithm(rects, 0, rects.length-1, translations);
 }
@@ -80,8 +87,29 @@ let merge = async(rects, leftPtr, middlePtr, rightPtr, translations) => {
 	return Promise.resolve();
 }
 
-let bubbleSort = () => {
-	return;
+/**
+ * Basic bubble sort algorithm. Brings elements from end of the inputted array to the front of the array.
+ * Compares element to element in place before it and swaps if it is less.
+ * 
+ * @param 	{array}		rects: array of rect svg elements in the svg window in order of being created (
+ * 							order of unsorted elements).
+ */
+let bubbleSort = async(rects) => {
+	//array containing translations of rect svg objects
+	const translations = getTranslations(rects.length);
+
+	for(let i = 0; i < rects.length-1; i++) {
+		for(let j = rects.length-1; j > i; j--) {
+			//color rects to indicate rects being checked
+			await colorMultiEle([rects[j], rects[j-1]], CHANGE_COLOR);
+			if(parseInt(rects[j].getAttribute('height')) < parseInt(rects[j-1].getAttribute('height'))){
+				await swap(rects[j], rects[j-1]);
+				[rects[j], rects[j-1]] = [rects[j-1], rects[j]];
+			}
+			//color rects to normal color
+			await colorMultiEle([rects[j], rects[j-1]], NORMAL_COLOR);
+		}
+	}
 }
 
 let heapSort = () => {
@@ -164,8 +192,13 @@ let insertionSort = async(rects) => {
 		key = parseFloat(rects[currRectIdx].getAttribute('height'));
 		compRectIdx = currRectIdx-1;
 		while(compRectIdx >= 0 && key < parseFloat(rects[compRectIdx].getAttribute('height'))) {
+			//color rects indicating position change
+			await colorMultiEle([rects[compRectIdx], rects[compRectIdx+1]], CHANGE_COLOR);
 			//swaps translation of rects
 			await swap(rects[compRectIdx], rects[compRectIdx+1]);
+			//color rects indicating return to normal
+			await colorMultiEle([rects[compRectIdx], rects[compRectIdx+1]], NORMAL_COLOR);
+
 			//swap array positioning withing rects
 			[rects[compRectIdx], rects[compRectIdx+1]] = [rects[compRectIdx+1], rects[compRectIdx]];
 
