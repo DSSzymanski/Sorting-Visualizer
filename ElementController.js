@@ -9,7 +9,7 @@ let init = () => {
  */
 let initSvg = () => {
 	const svg = document.querySelector("#sortingDisplaySvg");
-	svg.setAttribute("width", "1000");
+	svg.setAttribute("width", "500");
 	svg.setAttribute("height", "400");
 }
 
@@ -152,6 +152,29 @@ let colorElement = (rect, color) => {
 			const fill = 'fill: ' + color + '; ';
 			const stroke = 'stroke: black; stroke-width: 1; ';
 			rect.setAttribute('style', fill + stroke);
+			resolve();
+		}
+		setTimeout(colorRect, timeout);
+	});
+}
+
+/**
+ * colorElement is called to set an inputed array of svg rects fill to inputed color.
+ * 
+ * @param 	{array}			rects: array of svg rect objects to be colored.
+ * @param 	{string}		color: can be html color string (e.g. 'red') or a hex color code
+ * 								   (e.g. '#FFFFFF').
+ * 
+ * @return 	{promise}		returns promise when completed to have outer function resume.
+ */
+let colorMultiEle = (rects, color) => {
+	const timeout = 500 //timeout in ms
+
+	return new Promise((resolve) => {
+		let colorRect = () => {
+			const fill = 'fill: ' + color + '; ';
+			const stroke = 'stroke: black; stroke-width: 1; ';
+			rects.forEach(rect => rect.setAttribute('style', fill + stroke));
 			resolve();
 		}
 		setTimeout(colorRect, timeout);
