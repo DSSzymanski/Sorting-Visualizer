@@ -10,6 +10,10 @@ const NORMAL_COLOR = 'white';
 let mergeSort = (rects) => {
 	//array containing translations of rect svg objects
 	const translations = getTranslations(rects.length);
+
+	//add extra svg for showing comparisons
+	createNewSVG();
+
 	//run mergesort
 	mergeSortAlgorithm(rects, 0, rects.length-1, translations);
 }

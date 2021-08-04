@@ -263,6 +263,15 @@ let swap = (rect1, rect2) => {
 	});
 }
 
+let createNewSVG = () => {
+	const svgDiv = document.querySelector("#svgContainer");
+	let svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+	svg.setAttribute("width", "500");
+	svg.setAttribute("height", "400");
+	svg.setAttribute("id", "extraDisplaySVG");
+	svgDiv.appendChild(svg);
+}
+
 /**
  *Creates a rect element representing a bar for svg window.
  *
