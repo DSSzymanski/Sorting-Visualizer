@@ -108,7 +108,7 @@ let generateSvgElements = (eleSize) => {
 	nums = nums.sort(() => Math.random() - 0.5);
 
 	for(let i = 1; i <= eleSize; i++) {
-		rect = createRect(nums[i-1], i-1, width);
+		rect = createRect(nums[i-1], i-1, width, "rect"+i);
 		svg.appendChild(rect);
 	}
 }
@@ -239,7 +239,6 @@ let getTranslations = (length) => {
  *
  *@return {array}		Returns array of rects.
  */
-
 let getSortingElements = () => {
 	return [...document.querySelectorAll('rect')];
 }
@@ -287,13 +286,14 @@ let createNewSVG = () => {
  *TODO: change positioning to window size from static value
  *TODO: change styling of bars
  **/
-let createRect = (height, pos, width) => {
+let createRect = (height, pos, width, idName) => {
 	//string for rect style
 	const style = "fill: white; stroke-width: 1; stroke: black";
 	let rect = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
 	const translate = 'translate(' + pos*width + ')';
 
 	//setup rect
+	rect.setAttribute('id', idName);
 	rect.setAttribute('x', 0);
 	rect.setAttribute('y', 400-height);
 	rect.setAttribute('width', width);
