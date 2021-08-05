@@ -26,6 +26,10 @@ let resetSvg = () => {
 	let slider = document.querySelector("#sizeSlider");
 	slider.disabled = false;
 
+	if(!!document.getElementById("secondSVG")){
+		document.getElementById("secondSVG").remove();
+	}
+
 	//re-generate svg elements
 	generateSvgElements(slider.value);
 }
@@ -268,7 +272,7 @@ let createNewSVG = () => {
 	let svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
 	svg.setAttribute("width", "500");
 	svg.setAttribute("height", "400");
-	svg.setAttribute("id", "extraDisplaySVG");
+	svg.setAttribute("id", "secondSVG");
 	svgDiv.appendChild(svg);
 }
 
