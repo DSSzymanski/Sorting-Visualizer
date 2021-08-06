@@ -26,6 +26,10 @@ let resetSvg = () => {
 	let slider = document.querySelector("#sizeSlider");
 	slider.disabled = false;
 
+	if(!!document.getElementById("secondSVG")){
+		document.getElementById("secondSVG").remove();
+	}
+
 	//re-generate svg elements
 	generateSvgElements(slider.value);
 }
@@ -104,14 +108,37 @@ let generateSvgElements = (eleSize) => {
 	nums = nums.sort(() => Math.random() - 0.5);
 
 	for(let i = 1; i <= eleSize; i++) {
-		rect = createRect(nums[i-1], i-1, width);
+		rect = createRect(nums[i-1], i-1, width, "rect"+i);
 		svg.appendChild(rect);
 	}
 }
 
+let removeLine = (line) => {
+	const timeout = 500 //timeout in ms
+
+	return new Promise((resolve) => {
+		let remove = () => {
+			line.remove();
+			resolve();
+		}
+		setTimeout(remove, timeout);
+	});
+}
+
+let createLine = (data) => {
+	let xPos = parseFloat(data.split('(')[1].split(')')[0]);
+	let line = document.createElementNS("http://www.w3.org/2000/svg", 'line');
+	line.setAttribute('x1', xPos);
+	line.setAttribute('x2', xPos);
+	line.setAttribute('y1', 0);
+	line.setAttribute('y2', 400);
+	line.setAttribute('stroke', 'black');
+	document.getElementById('secondSVG').appendChild(line);
+	return line;
+}
+
 /**
- * Returns rect svg element to it's translation position after it has been moved off screen.
- * 	Timeout to space out events for viewing individual steps. 
+ * Returns rect svg element to the main svg window and moved to it's new position through translation.
  * 
  * @param 	{svg rect}		rect: current svg rect object to be brought back on screen.
  * @param 	{string}		translation: string representing the css translation used for the rect based on
@@ -129,6 +156,7 @@ let replaceElement = (rect, translation) => {
 			const stroke = 'stroke: black; stroke-width: 1; '; //css stroke styling
 			rect.setAttribute('style', fill + stroke);
 			rect.setAttribute('transform', translation);
+			document.getElementById('sortingDisplaySvg').appendChild(rect);
 			resolve();
 		}
 		setTimeout(recolor, timeout);
@@ -183,33 +211,32 @@ let colorMultiEle = (rects, color) => {
 
 /**
  * Function used within merge sort when rect svg objects are colored for moving and
- * 		moved off screen. Color can be changed from within the colorElement function
+ * 		moved to the 2nd svg window. Color can be changed from within the colorElement function
  * 		call.
  * 
  * @param 	{svg rect}	rect: rect object to be moved.
  */
 let hideElement = async(rect) => {
 	await colorElement(rect, 'red'); //color for moving off screen
-	await moveElement(rect); //move off screen
+	await moveToSecondSVG(rect); //move off screen
 }
 
 /**
- * Function used to move svg rect off the svg window. Sets translation of rect to
- * -100 and returns a promise.
+ * Moves inputed rect from main svg window to 2nd svg window.
  * 
- * @param 	{svg rect}	rect: svg rect to be moved off the svg window.
+ * @param 	{svg rect}	rect: svg rect to be moved to 2nd svg window.
  * 
  * @returns {promise}	returns promise when completed to have outer function resume.
  */
-let moveElement = (rect) => {
+let moveToSecondSVG = (rect) => {
 	const timeout = 500 //timeout in ms
 
 	return new Promise((resolve) => {
-		let swaps = () => {
-			rect.setAttribute('transform', 'translate(' + -100 + ')');
+		let moveSecond = () => {
+			document.getElementById('secondSVG').appendChild(rect);
 			resolve();
 		}
-		setTimeout(swaps, timeout);
+		setTimeout(moveSecond, timeout);
 	});
 }
 
@@ -235,7 +262,6 @@ let getTranslations = (length) => {
  *
  *@return {array}		Returns array of rects.
  */
-
 let getSortingElements = () => {
 	return [...document.querySelectorAll('rect')];
 }
@@ -268,7 +294,7 @@ let createNewSVG = () => {
 	let svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
 	svg.setAttribute("width", "500");
 	svg.setAttribute("height", "400");
-	svg.setAttribute("id", "extraDisplaySVG");
+	svg.setAttribute("id", "secondSVG");
 	svgDiv.appendChild(svg);
 }
 
@@ -278,18 +304,20 @@ let createNewSVG = () => {
  *@param 	{int}		height: int representing the text value.
  *@param 	{int}		pos: int representing which bar the text belongs to and positioning.
  *@param 	{number}	width: decimal value represeting the width of the bar/text area.
+ *@param 	{string}	idName: incremental string used for rect id.
  *
  *@returns	{SVG rect}	returns svg rectangle element for given inputs
  *TODO: change positioning to window size from static value
  *TODO: change styling of bars
  **/
-let createRect = (height, pos, width) => {
+let createRect = (height, pos, width, idName) => {
 	//string for rect style
 	const style = "fill: white; stroke-width: 1; stroke: black";
 	let rect = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
 	const translate = 'translate(' + pos*width + ')';
 
 	//setup rect
+	rect.setAttribute('id', idName);
 	rect.setAttribute('x', 0);
 	rect.setAttribute('y', 400-height);
 	rect.setAttribute('width', width);
