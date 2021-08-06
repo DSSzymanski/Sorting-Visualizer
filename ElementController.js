@@ -113,6 +113,30 @@ let generateSvgElements = (eleSize) => {
 	}
 }
 
+let removeLine = (line) => {
+	const timeout = 500 //timeout in ms
+
+	return new Promise((resolve) => {
+		let remove = () => {
+			line.remove();
+			resolve();
+		}
+		setTimeout(remove, timeout);
+	});
+}
+
+let createLine = (data) => {
+	let xPos = parseFloat(data.split('(')[1].split(')')[0]);
+	let line = document.createElementNS("http://www.w3.org/2000/svg", 'line');
+	line.setAttribute('x1', xPos);
+	line.setAttribute('x2', xPos);
+	line.setAttribute('y1', 0);
+	line.setAttribute('y2', 400);
+	line.setAttribute('stroke', 'black');
+	document.getElementById('secondSVG').appendChild(line);
+	return line;
+}
+
 /**
  * Returns rect svg element to the main svg window and moved to it's new position through translation.
  * 

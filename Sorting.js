@@ -60,6 +60,7 @@ let merge = async(rects, leftPtr, middlePtr, rightPtr, translations) => {
 		await hideElement(rects[idx]);
 		leftRect.push(rects[idx]);
 	}
+	let line = createLine(rects[middlePtr+1].getAttribute('transform'));	
 	//move right side of array off svg element and store for sorting
 	for(idx = middlePtr+1; idx <= rightPtr; idx++){
 		await hideElement(rects[idx]);
@@ -84,6 +85,7 @@ let merge = async(rects, leftPtr, middlePtr, rightPtr, translations) => {
 			rightIter += 1;
 		}
 	}
+	removeLine(line);
 	return Promise.resolve();
 }
 
