@@ -26,6 +26,7 @@ let resetSvg = () => {
 	let slider = document.querySelector("#sizeSlider");
 	slider.disabled = false;
 
+	//remove second svg if merge sort or heap sort was called prior
 	if(!!document.getElementById("secondSVG")){
 		document.getElementById("secondSVG").remove();
 	}
@@ -113,6 +114,14 @@ let generateSvgElements = (eleSize) => {
 	}
 }
 
+/**
+ * Function to remove line separating left and right sides of arrays. Used only
+ * 	in merge sort algorithm.
+ * 
+ * @param 	{svg line}	line: svg line object to be removed from svg.
+ * 
+ * @returns 	{promise}	returns promise when timeout is done.
+ */
 let removeLine = (line) => {
 	const timeout = 500 //timeout in ms
 
@@ -125,6 +134,15 @@ let removeLine = (line) => {
 	});
 }
 
+/**
+ * Function to add line separating left and right sides of arrays. Used only
+ * 	in merge sort algorithm.
+ * 
+ * @param 	{string}			data: string representing translation of first rect of the right array.
+ * 									Should always be in the format "translate({number})"
+ * 
+ * @returns 	{svg line}		returns the generated line when finished.
+ */
 let createLine = (data) => {
 	let xPos = parseFloat(data.split('(')[1].split(')')[0]);
 	let line = document.createElementNS("http://www.w3.org/2000/svg", 'line');
@@ -151,15 +169,16 @@ let replaceElement = (rect, translation) => {
 	const timeout = 500 //timeout in ms
 
 	return new Promise((resolve) => {
-		let recolor = () => {
+		let replace = () => {
 			const fill = 'fill: white; ' //css fill styling
 			const stroke = 'stroke: black; stroke-width: 1; '; //css stroke styling
 			rect.setAttribute('style', fill + stroke);
 			rect.setAttribute('transform', translation);
+			//move to main svg window
 			document.getElementById('sortingDisplaySvg').appendChild(rect);
 			resolve();
 		}
-		setTimeout(recolor, timeout);
+		setTimeout(replace, timeout);
 	});
 }
 	
@@ -218,7 +237,7 @@ let colorMultiEle = (rects, color) => {
  */
 let hideElement = async(rect) => {
 	await colorElement(rect, 'red'); //color for moving off screen
-	await moveToSecondSVG(rect); //move off screen
+	await moveToSecondSVG(rect); //move to second svg window
 }
 
 /**
@@ -233,6 +252,7 @@ let moveToSecondSVG = (rect) => {
 
 	return new Promise((resolve) => {
 		let moveSecond = () => {
+			//move to second svg window
 			document.getElementById('secondSVG').appendChild(rect);
 			resolve();
 		}
@@ -289,8 +309,14 @@ let swap = (rect1, rect2) => {
 	});
 }
 
+/**
+ * Creates second SVG window on screen. Used in merge sort to show sorted arrays to
+ * 		be merged and in heap sort to visualize the heap.
+ */
 let createNewSVG = () => {
+	//find location to be added
 	const svgDiv = document.querySelector("#svgContainer");
+	//setup and add svg
 	let svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
 	svg.setAttribute("width", "500");
 	svg.setAttribute("height", "400");
