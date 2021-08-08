@@ -55,12 +55,15 @@ let mergeSortAlgorithm = async(rects, leftPtr, rightPtr, translations) => {
 let merge = async(rects, leftPtr, middlePtr, rightPtr, translations) => {
 	let idx; //index used for iterating over rect array
 	let leftRect = [], rightRect = [];
+
+	//line to show break between left and right rect arrays
+	createLine(rects[middlePtr+1].getAttribute('transform'));	
+
 	//move left side of array off the svg element and store for sorting
 	for(idx = leftPtr; idx <= middlePtr; idx++) {
 		await hideElement(rects[idx]);
 		leftRect.push(rects[idx]);
 	}
-	let line = createLine(rects[middlePtr+1].getAttribute('transform'));	
 	//move right side of array off svg element and store for sorting
 	for(idx = middlePtr+1; idx <= rightPtr; idx++){
 		await hideElement(rects[idx]);
@@ -85,7 +88,8 @@ let merge = async(rects, leftPtr, middlePtr, rightPtr, translations) => {
 			rightIter += 1;
 		}
 	}
-	removeLine(line);
+	//remove line when done
+	await removeLine();
 	return Promise.resolve();
 }
 

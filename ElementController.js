@@ -118,16 +118,14 @@ let generateSvgElements = (eleSize) => {
  * Function to remove line separating left and right sides of arrays. Used only
  * 	in merge sort algorithm.
  * 
- * @param 	{svg line}	line: svg line object to be removed from svg.
- * 
  * @returns 	{promise}	returns promise when timeout is done.
  */
-let removeLine = (line) => {
+let removeLine = () => {
 	const timeout = 500 //timeout in ms
 
 	return new Promise((resolve) => {
 		let remove = () => {
-			line.remove();
+			document.getElementById('dividingLine').remove();
 			resolve();
 		}
 		setTimeout(remove, timeout);
@@ -146,13 +144,13 @@ let removeLine = (line) => {
 let createLine = (data) => {
 	let xPos = parseFloat(data.split('(')[1].split(')')[0]);
 	let line = document.createElementNS("http://www.w3.org/2000/svg", 'line');
+	line.setAttribute('id', 'dividingLine');
 	line.setAttribute('x1', xPos);
 	line.setAttribute('x2', xPos);
 	line.setAttribute('y1', 0);
 	line.setAttribute('y2', 400);
 	line.setAttribute('stroke', 'black');
 	document.getElementById('secondSVG').appendChild(line);
-	return line;
 }
 
 /**
