@@ -55,12 +55,15 @@ let mergeSortAlgorithm = async(rects, leftPtr, rightPtr, translations) => {
 let merge = async(rects, leftPtr, middlePtr, rightPtr, translations) => {
 	let idx; //index used for iterating over rect array
 	let leftRect = [], rightRect = [];
+
+	//line to show break between left and right rect arrays
+	createLine(rects[middlePtr+1].getAttribute('transform'));	
+
 	//move left side of array off the svg element and store for sorting
 	for(idx = leftPtr; idx <= middlePtr; idx++) {
 		await hideElement(rects[idx]);
 		leftRect.push(rects[idx]);
 	}
-	let line = createLine(rects[middlePtr+1].getAttribute('transform'));	
 	//move right side of array off svg element and store for sorting
 	for(idx = middlePtr+1; idx <= rightPtr; idx++){
 		await hideElement(rects[idx]);
@@ -85,7 +88,8 @@ let merge = async(rects, leftPtr, middlePtr, rightPtr, translations) => {
 			rightIter += 1;
 		}
 	}
-	removeLine(line);
+	//remove line when done
+	await removeLine();
 	return Promise.resolve();
 }
 
@@ -114,8 +118,59 @@ let bubbleSort = async(rects) => {
 	}
 }
 
-let heapSort = () => {
-	return;
+let heapSort = async(rects) => {
+	//add extra svg for showing heap
+	createNewSVG();
+
+	await buildMaxHeap(rects);
+	for(let i = rects.length-1; i >= 1; i--) {
+		await colorMultiEle([rects[0], rects[i]], CHANGE_COLOR);
+		await swap(rects[0], rects[i]);
+		[rects[0], rects[i]] = [rects[i], rects[0]];
+		await colorMultiEle([rects[0], rects[i]], NORMAL_COLOR);
+		await maxHeapify(rects, 0, i-1);
+	}
+}
+
+let buildMaxHeap = async(rects) => {
+	for(let i = Math.floor((rects.length - 1) / 2); i >= 0; i--) {
+		await maxHeapify(rects, i, rects.length-1);
+	}
+}
+
+let maxHeapify = async(rects, pos, endPos) => {
+	let largest = pos;
+	let left = getLeftNode(pos);
+	let right = getRightNode(pos);
+	if(left <= endPos) {
+		if(parseInt(rects[left].getAttribute('height')) > parseInt(rects[pos].getAttribute('height'))){
+			largest = left;
+		}
+	}
+	if(right <= endPos) {
+		if(parseInt(rects[right].getAttribute('height')) > parseInt(rects[largest].getAttribute('height'))){
+			largest = right;
+		}
+	}
+	if(largest != pos) {
+		await colorMultiEle([rects[pos], rects[largest]], CHANGE_COLOR);
+		await swap(rects[pos], rects[largest]);
+		[rects[pos], rects[largest]] = [rects[largest], rects[pos]];
+		await colorMultiEle([rects[pos], rects[largest]], NORMAL_COLOR);
+		await maxHeapify(rects, largest, endPos);
+	}
+}
+
+let getParentNode = (pos) => {
+	return Math.floor((pos + 1) / 2) - 1;
+}
+
+let getLeftNode = (pos) => {
+	return ((pos + 1) * 2) - 1;
+}
+
+let getRightNode = (pos) => {
+	return (pos + 1) * 2;
 }
 
 /**
@@ -159,14 +214,19 @@ let partition = async (rects, low, high) => {
 	pivot = parseFloat(rects[high].getAttribute('height'));
 	lowPtr = low - 1;
 	for(j = low; j < high; j++) {
+		await colorMultiEle([rects[j], rects[lowPtr+1]], CHANGE_COLOR);
 		if(parseFloat(rects[j].getAttribute('height')) < pivot) {
 			lowPtr = lowPtr + 1;
 			await swap(rects[lowPtr], rects[j]);
+			await colorMultiEle([rects[j], rects[lowPtr]], NORMAL_COLOR);
 			[rects[lowPtr], rects[j]] = [rects[j], rects[lowPtr]];
 		}
+		await colorMultiEle([rects[j], rects[lowPtr+1]], NORMAL_COLOR);
 	}
 	if(lowPtr+1 != high){
+		await colorMultiEle([rects[high], rects[lowPtr+1]], CHANGE_COLOR);
 		await swap(rects[lowPtr+1], rects[high]);
+		await colorMultiEle([rects[high], rects[lowPtr+1]], NORMAL_COLOR);
 		[rects[lowPtr+1], rects[high]] = [rects[high], rects[lowPtr+1]];
 	}
 	return Promise.resolve(lowPtr + 1);
