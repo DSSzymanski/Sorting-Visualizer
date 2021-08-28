@@ -118,8 +118,33 @@ let bubbleSort = async(rects) => {
 	}
 }
 
-let heapSort = () => {
+let heapSort = (test) => {
 	return;
+	buildMaxHeap(test);
+	for(let i = test.length-1; i >= 1; i--) {
+		[test[0], test[i]] = [test[i], test[0]];
+		maxHeapify(test, 0, i-1);
+	}
+}
+
+let buildMaxHeap = (arr) => {
+	for(let i = Math.floor((arr.length - 1) / 2); i >= 0; i--) {
+		maxHeapify(arr, i, arr.length-1);
+	}
+}
+
+let maxHeapify = (arr, pos, endPos) => {
+	let largest;
+	let left = getLeftNode(pos);
+	let right = getRightNode(pos);
+	largest = (left <= endPos && arr[left] > arr[pos]) ? left : pos;
+	if(right <= endPos && arr[right] > arr[largest]) {
+		largest = right;
+	}
+	if(largest != pos) {
+		[arr[pos], arr[largest]] = [arr[largest], arr[pos]];
+		maxHeapify(arr, largest, endPos);
+	}
 }
 
 let getParentNode = (pos) => {
