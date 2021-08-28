@@ -73,6 +73,9 @@ let startAlgorithm = async () => {
 	else if(BUBBLE.localeCompare(alg) == COMPARE_TRUE){
 		bubbleSort(rects);
 	}
+	else if(HEAP.localeCompare(alg) == COMPARE_TRUE){
+		heapSort(rects);
+	}
 }
 
 /**

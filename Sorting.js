@@ -122,6 +122,18 @@ let heapSort = () => {
 	return;
 }
 
+let getParentNode = (pos) => {
+	return Math.floor((pos + 1) / 2) - 1;
+}
+
+let getLeftNode = (pos) => {
+	return ((pos + 1) * 2) - 1;
+}
+
+let getRightNode = (pos) => {
+	return (pos + 1) * 2;
+}
+
 /**
  * Quick sort algorithm. Run when algorithm select box is on Quick sort and start button is clicked.
  *
@@ -163,14 +175,19 @@ let partition = async (rects, low, high) => {
 	pivot = parseFloat(rects[high].getAttribute('height'));
 	lowPtr = low - 1;
 	for(j = low; j < high; j++) {
+		await colorMultiEle([rects[j], rects[lowPtr+1]], CHANGE_COLOR);
 		if(parseFloat(rects[j].getAttribute('height')) < pivot) {
 			lowPtr = lowPtr + 1;
 			await swap(rects[lowPtr], rects[j]);
+			await colorMultiEle([rects[j], rects[lowPtr]], NORMAL_COLOR);
 			[rects[lowPtr], rects[j]] = [rects[j], rects[lowPtr]];
 		}
+		await colorMultiEle([rects[j], rects[lowPtr+1]], NORMAL_COLOR);
 	}
 	if(lowPtr+1 != high){
+		await colorMultiEle([rects[high], rects[lowPtr+1]], CHANGE_COLOR);
 		await swap(rects[lowPtr+1], rects[high]);
+		await colorMultiEle([rects[high], rects[lowPtr+1]], NORMAL_COLOR);
 		[rects[lowPtr+1], rects[high]] = [rects[high], rects[lowPtr+1]];
 	}
 	return Promise.resolve(lowPtr + 1);
