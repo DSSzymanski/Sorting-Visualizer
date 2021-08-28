@@ -118,32 +118,39 @@ let bubbleSort = async(rects) => {
 	}
 }
 
-let heapSort = (test) => {
-	return;
-	buildMaxHeap(test);
-	for(let i = test.length-1; i >= 1; i--) {
-		[test[0], test[i]] = [test[i], test[0]];
-		maxHeapify(test, 0, i-1);
+let heapSort = async(rects) => {
+	await buildMaxHeap(rects);
+	for(let i = rects.length-1; i >= 1; i--) {
+		await swap(rects[0], rects[i]);
+		[rects[0], rects[i]] = [rects[i], rects[0]];
+		await maxHeapify(rects, 0, i-1);
 	}
 }
 
-let buildMaxHeap = (arr) => {
-	for(let i = Math.floor((arr.length - 1) / 2); i >= 0; i--) {
-		maxHeapify(arr, i, arr.length-1);
+let buildMaxHeap = async(rects) => {
+	for(let i = Math.floor((rects.length - 1) / 2); i >= 0; i--) {
+		await maxHeapify(rects, i, rects.length-1);
 	}
 }
 
-let maxHeapify = (arr, pos, endPos) => {
-	let largest;
+let maxHeapify = async(rects, pos, endPos) => {
+	let largest = pos;
 	let left = getLeftNode(pos);
 	let right = getRightNode(pos);
-	largest = (left <= endPos && arr[left] > arr[pos]) ? left : pos;
-	if(right <= endPos && arr[right] > arr[largest]) {
-		largest = right;
+	if(left <= endPos) {
+		if(parseInt(rects[left].getAttribute('height')) > parseInt(rects[pos].getAttribute('height'))){
+			largest = left;
+		}
+	}
+	if(right <= endPos) {
+		if(parseInt(rects[right].getAttribute('height')) > parseInt(rects[largest].getAttribute('height'))){
+			largest = right;
+		}
 	}
 	if(largest != pos) {
-		[arr[pos], arr[largest]] = [arr[largest], arr[pos]];
-		maxHeapify(arr, largest, endPos);
+		await swap(rects[pos], rects[largest]);
+		[rects[pos], rects[largest]] = [rects[largest], rects[pos]];
+		await maxHeapify(rects, largest, endPos);
 	}
 }
 
