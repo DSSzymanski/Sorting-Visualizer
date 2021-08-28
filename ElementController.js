@@ -1,3 +1,5 @@
+const timeout = 100; //used for intervals/timeouts
+
 let init = () => {
 	initSvg();
 	initSlider();
@@ -124,8 +126,6 @@ let generateSvgElements = (eleSize) => {
  * @returns 	{promise}	returns promise when timeout is done.
  */
 let removeLine = () => {
-	const timeout = 500 //timeout in ms
-
 	return new Promise((resolve) => {
 		let remove = () => {
 			document.getElementById('dividingLine').remove();
@@ -167,8 +167,6 @@ let createLine = (data) => {
  * 
  */
 let replaceElement = (rect, translation) => {
-	const timeout = 500 //timeout in ms
-
 	return new Promise((resolve) => {
 		let replace = () => {
 			const fill = 'fill: white; ' //css fill styling
@@ -193,8 +191,6 @@ let replaceElement = (rect, translation) => {
  * @return 	{promise}		returns promise when completed to have outer function resume.
  */
 let colorElement = (rect, color) => {
-	const timeout = 500 //timeout in ms
-
 	return new Promise((resolve) => {
 		let colorRect = () => {
 			const fill = 'fill: ' + color + '; ';
@@ -216,8 +212,6 @@ let colorElement = (rect, color) => {
  * @return 	{promise}		returns promise when completed to have outer function resume.
  */
 let colorMultiEle = (rects, color) => {
-	const timeout = 500 //timeout in ms
-
 	return new Promise((resolve) => {
 		let colorRect = () => {
 			const fill = 'fill: ' + color + '; ';
@@ -249,8 +243,6 @@ let hideElement = async(rect) => {
  * @returns {promise}	returns promise when completed to have outer function resume.
  */
 let moveToSecondSVG = (rect) => {
-	const timeout = 500 //timeout in ms
-
 	return new Promise((resolve) => {
 		let moveSecond = () => {
 			//move to second svg window
@@ -297,8 +289,6 @@ let getSortingElements = () => {
  *@returns	{promise}	returns promis when completed to move to next step.
  */
 let swap = (rect1, rect2) => {
-	const timeout = 500 //timeout in ms
-
 	return new Promise((resolve) => {
 		let swaps = () => {
 			let temp1 = rect1.getAttribute('transform');
