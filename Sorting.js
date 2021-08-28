@@ -119,10 +119,15 @@ let bubbleSort = async(rects) => {
 }
 
 let heapSort = async(rects) => {
+	//add extra svg for showing heap
+	createNewSVG();
+
 	await buildMaxHeap(rects);
 	for(let i = rects.length-1; i >= 1; i--) {
+		await colorMultiEle([rects[0], rects[i]], CHANGE_COLOR);
 		await swap(rects[0], rects[i]);
 		[rects[0], rects[i]] = [rects[i], rects[0]];
+		await colorMultiEle([rects[0], rects[i]], NORMAL_COLOR);
 		await maxHeapify(rects, 0, i-1);
 	}
 }
@@ -148,8 +153,10 @@ let maxHeapify = async(rects, pos, endPos) => {
 		}
 	}
 	if(largest != pos) {
+		await colorMultiEle([rects[pos], rects[largest]], CHANGE_COLOR);
 		await swap(rects[pos], rects[largest]);
 		[rects[pos], rects[largest]] = [rects[largest], rects[pos]];
+		await colorMultiEle([rects[pos], rects[largest]], NORMAL_COLOR);
 		await maxHeapify(rects, largest, endPos);
 	}
 }
