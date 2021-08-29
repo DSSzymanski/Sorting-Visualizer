@@ -200,8 +200,8 @@ let quickSort = async(rects, low=0, high=rects.length-1) => {
 	let pivot;
 	if(low < high) {
 		pivot = await partition(rects, low, high);
-		quickSort(rects, low, pivot-1);
-		quickSort(rects, pivot+1, high);
+		await quickSort(rects, low, pivot-1);
+		await quickSort(rects, pivot+1, high);
 	}
 }
 
@@ -219,19 +219,20 @@ let quickSort = async(rects, low=0, high=rects.length-1) => {
  * 
  * @returns {promise, int}	returns promise and int representing where in the pivot point in the array lies.
  */
-let partition = async (rects, low, high) => {
+let partition = async(rects, low, high) => {
 	let pivot, lowPtr, j; //j = loop iterator, lowPtr = position of lower than pivot
 	pivot = parseFloat(rects[high].getAttribute('height'));
 	lowPtr = low - 1;
 	for(j = low; j < high; j++) {
-		await colorMultiEle([rects[j], rects[lowPtr+1]], CHANGE_COLOR);
 		if(parseFloat(rects[j].getAttribute('height')) < pivot) {
 			lowPtr = lowPtr + 1;
-			await swap(rects[lowPtr], rects[j]);
-			await colorMultiEle([rects[j], rects[lowPtr]], NORMAL_COLOR);
-			[rects[lowPtr], rects[j]] = [rects[j], rects[lowPtr]];
+			if(lowPtr != j){
+				await colorMultiEle([rects[j], rects[lowPtr]], CHANGE_COLOR);
+				await swap(rects[lowPtr], rects[j]);
+				await colorMultiEle([rects[j], rects[lowPtr]], NORMAL_COLOR);
+				[rects[lowPtr], rects[j]] = [rects[j], rects[lowPtr]];
+			}
 		}
-		await colorMultiEle([rects[j], rects[lowPtr+1]], NORMAL_COLOR);
 	}
 	if(lowPtr+1 != high){
 		await colorMultiEle([rects[high], rects[lowPtr+1]], CHANGE_COLOR);
