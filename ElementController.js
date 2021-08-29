@@ -15,6 +15,56 @@ let initSvg = () => {
 	svg.setAttribute("height", "400");
 }
 
+let initCircles = (quantity) => {
+	let circles = [], texts = [];
+	let svg = document.getElementById("secondSVG");
+	let maxRows = 5;
+	
+	let yPos = svg.getAttribute('height') / maxRows;
+	let yOffset = yPos / 2;
+
+	let colPerRow = 1;
+	let count = 0;
+	for(let row = 0; row < maxRows; row++){
+		let xPos = svg.getAttribute('width') / colPerRow;
+		let xOffset = xPos / 2;
+		
+		for(let col = 0; col < colPerRow; col++){
+			let newCircle = createCircle(col, row, xPos, yPos, xOffset, yOffset);
+			svg.appendChild(newCircle);
+			circles.push(newCircle);
+
+			let newText = createText(col, row, xPos, yPos, xOffset, yOffset, count);
+			svg.appendChild(newText);
+			texts.push(newText);
+
+			count++;
+		}
+		colPerRow *= 2;
+	}
+
+}
+
+let createText = (col, row, xPos, yPos, xOffset, yOffset, inputText) => {
+	let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+	text.setAttribute('x', (col * xPos) + xOffset);
+	text.setAttribute('y', (row * yPos) + 1.15 * yOffset);
+	text.setAttribute('text-anchor', 'middle');
+	text.textContent = inputText;
+	
+	return text;
+}
+
+let createCircle = (col, row, xPos, yPos, xOffset, yOffset) => {
+	let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+	circle.setAttribute('cx', (col * xPos) + xOffset);
+	circle.setAttribute('cy', (row * yPos) + yOffset);
+	circle.setAttribute('r', 11);
+	circle.setAttribute('style', 'stroke: black; stroke-width: 1; fill: white;');
+	
+	return circle;
+}
+
 /**
  *Function for reset button onclick.
  *
@@ -400,4 +450,3 @@ let startTimer = () => {
 	}
 }
 **/
-

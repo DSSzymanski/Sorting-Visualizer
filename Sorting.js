@@ -121,6 +121,7 @@ let bubbleSort = async(rects) => {
 let heapSort = async(rects) => {
 	//add extra svg for showing heap
 	createNewSVG();
+	initCircles();
 
 	await buildMaxHeap(rects);
 	for(let i = rects.length-1; i >= 1; i--) {
