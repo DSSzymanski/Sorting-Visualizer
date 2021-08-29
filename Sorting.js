@@ -1,5 +1,7 @@
 const CHANGE_COLOR = 'yellow';
 const NORMAL_COLOR = 'white';
+const CIRCLE_CHANGE_COLOR = 'red';
+const CIRCLE_NORMAL_COLOR = 'black';
 
 /**
  * Function called to run merge sort algorithm on inputed array of rect objects.
@@ -120,26 +122,30 @@ let bubbleSort = async(rects) => {
 
 let heapSort = async(rects) => {
 	//add extra svg for showing heap
-	createNewSVG();
-	initCircles();
-
-	await buildMaxHeap(rects);
+	let svg = createNewSVG();
+	let circles = [], lines = [], texts = [];
+	[circles, lines, texts] = initHeapSVG(svg, rects);
+	await buildMaxHeap(rects, circles, texts);
 	for(let i = rects.length-1; i >= 1; i--) {
 		await colorMultiEle([rects[0], rects[i]], CHANGE_COLOR);
+		colorCircles(circles[0], circles[i], CIRCLE_CHANGE_COLOR);
 		await swap(rects[0], rects[i]);
 		[rects[0], rects[i]] = [rects[i], rects[0]];
+		[texts[0].textContent, texts[i].textContent] = [texts[i].textContent, texts[0].textContent];
+		colorCircles(circles[0], circles[i], CIRCLE_NORMAL_COLOR);
+		deleteLine(lines, i);
 		await colorMultiEle([rects[0], rects[i]], NORMAL_COLOR);
-		await maxHeapify(rects, 0, i-1);
+		await maxHeapify(rects, 0, i-1, circles, texts);
 	}
 }
 
-let buildMaxHeap = async(rects) => {
+let buildMaxHeap = async(rects, circles, texts) => {
 	for(let i = Math.floor((rects.length - 1) / 2); i >= 0; i--) {
-		await maxHeapify(rects, i, rects.length-1);
+		await maxHeapify(rects, i, rects.length-1, circles, texts);
 	}
 }
 
-let maxHeapify = async(rects, pos, endPos) => {
+let maxHeapify = async(rects, pos, endPos, circles, texts) => {
 	let largest = pos;
 	let left = getLeftNode(pos);
 	let right = getRightNode(pos);
@@ -155,10 +161,13 @@ let maxHeapify = async(rects, pos, endPos) => {
 	}
 	if(largest != pos) {
 		await colorMultiEle([rects[pos], rects[largest]], CHANGE_COLOR);
+		colorCircles(circles[pos], circles[largest], CIRCLE_CHANGE_COLOR);
 		await swap(rects[pos], rects[largest]);
 		[rects[pos], rects[largest]] = [rects[largest], rects[pos]];
+		[texts[pos].textContent, texts[largest].textContent] = [texts[largest].textContent, texts[pos].textContent];
 		await colorMultiEle([rects[pos], rects[largest]], NORMAL_COLOR);
-		await maxHeapify(rects, largest, endPos);
+		colorCircles(circles[pos], circles[largest], CIRCLE_NORMAL_COLOR);
+		await maxHeapify(rects, largest, endPos, circles, texts);
 	}
 }
 
