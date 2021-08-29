@@ -1,9 +1,12 @@
-const timeout = 500; //used for intervals/timeouts
+var timeout = 1000; //used for intervals/timeouts
+
 const circleStyle =  "stroke-width: 2; fill: white;";
+const MAX_HEAP_SIZE = 31; //max heap size that can fit in window
 
 let init = () => {
 	initSvg();
-	initSlider();
+	initSizeSlider();
+	initSpeedSlider();
 }
 
 /**
@@ -465,6 +468,23 @@ let getDim = (svg) => {
 	return [Number(svg.getAttribute("width")), Number(svg.getAttribute("height"))];
 }
 
+let initSpeedSlider = () => {
+	const slider = document.querySelector("#speedSlider");
+	let text = document.querySelector("#speedTB");
+
+	const initialValue = 500;
+
+	//initialize slider, textbox, and svg elements with initial value
+	slider.value = initialValue;
+	text.innerText = "Speed(ms): " + initialValue;
+
+	//setup slider to change text and svg elements when slid
+	slider.oninput = function() {
+		text.innerText = "Speed(ms): " + this.value;
+		timeout = slider.value;
+	}
+}
+
 /**
  *Initializes size slider element.
  *
@@ -472,7 +492,7 @@ let getDim = (svg) => {
  * update the svg window to have current slider values of svg text and
  * svg rect elements.
  */
-let initSlider = () => {
+let initSizeSlider = () => {
 	const slider = document.querySelector("#sizeSlider");
 	let text = document.querySelector("#sliderTB");
 
