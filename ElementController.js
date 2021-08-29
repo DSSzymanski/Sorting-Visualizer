@@ -1,4 +1,5 @@
-const timeout = 100; //used for intervals/timeouts
+const timeout = 200; //used for intervals/timeouts
+const circleStyle =  "stroke-width: 2; fill: white;";
 
 let init = () => {
 	initSvg();
@@ -15,9 +16,15 @@ let initSvg = () => {
 	svg.setAttribute("height", "400");
 }
 
-let initCircles = (quantity) => {
+let initHeapSVG = (svg, rects) => {
 	let circles = [], texts = [];
-	let svg = document.getElementById("secondSVG");
+	[circles, texts] = initCirclesAndTexts(svg, rects);
+	let lines = createLines(circles, svg);
+	return [circles, lines, texts];
+}
+
+let initCirclesAndTexts = (svg, rects) => {
+	let circles = [], texts = [];
 	let maxRows = 5;
 	
 	let yPos = svg.getAttribute('height') / maxRows;
@@ -25,6 +32,7 @@ let initCircles = (quantity) => {
 
 	let colPerRow = 1;
 	let count = 0;
+	
 	for(let row = 0; row < maxRows; row++){
 		let xPos = svg.getAttribute('width') / colPerRow;
 		let xOffset = xPos / 2;
@@ -34,15 +42,50 @@ let initCircles = (quantity) => {
 			svg.appendChild(newCircle);
 			circles.push(newCircle);
 
-			let newText = createText(col, row, xPos, yPos, xOffset, yOffset, count);
+			let newText = createText(col, row, xPos, yPos, xOffset, yOffset, Math.floor(rects[count].getAttribute('height')));
 			svg.appendChild(newText);
 			texts.push(newText);
 
 			count++;
+			if(count == rects.length) {return [circles, texts];}
 		}
 		colPerRow *= 2;
 	}
+	return [circles, texts];
+}
 
+let deleteLine = (lines, node) => {
+	lines[node-1].setAttribute('stroke', 'none');
+}
+
+let createLines = (circles, svg) => {
+	let lines = []
+	for(let currNode = 1; currNode < circles.length; currNode++) {
+		let parentNode = getParentNode(currNode);
+		let newLine = createHeapLine(circles[parentNode], circles[currNode]);
+		svg.appendChild(newLine);
+		lines.push(newLine);
+	}
+	return lines;
+}
+
+let createHeapLine = (circle1, circle2) => {
+	let radius = parseInt(circle1.getAttribute('r')); //should be same for both circles
+
+	let x1 = circle1.getAttribute('cx');
+	let y1 = parseInt(circle1.getAttribute('cy')) + radius;
+
+	let x2 = circle2.getAttribute('cx');
+	let y2 = parseInt(circle2.getAttribute('cy')) - radius;
+
+	let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+	line.setAttribute('x1', x1);
+	line.setAttribute('x2', x2);
+	line.setAttribute('y1', y1);
+	line.setAttribute('y2', y2);
+	line.setAttribute('stroke', 'black');
+	
+	return line;
 }
 
 let createText = (col, row, xPos, yPos, xOffset, yOffset, inputText) => {
@@ -59,10 +102,24 @@ let createCircle = (col, row, xPos, yPos, xOffset, yOffset) => {
 	let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 	circle.setAttribute('cx', (col * xPos) + xOffset);
 	circle.setAttribute('cy', (row * yPos) + yOffset);
-	circle.setAttribute('r', 11);
-	circle.setAttribute('style', 'stroke: black; stroke-width: 1; fill: white;');
+	circle.setAttribute('r', 15);
+	circle.setAttribute('style', 'stroke: black;' + circleStyle);
 	
 	return circle;
+}
+
+/**
+ * colorElement is called to set an inputed array of svg rects fill to inputed color.
+ * 
+ * @param 	{array}			rects: array of svg rect objects to be colored.
+ * @param 	{string}		color: can be html color string (e.g. 'red') or a hex color code
+ * 								   (e.g. '#FFFFFF').
+ * 
+ * @return 	{promise}		returns promise when completed to have outer function resume.
+ */
+let colorCircles = (circle1, circle2, color) => {
+	circle1.setAttribute('style', 'stroke: ' + color + ';' + circleStyle);
+	circle2.setAttribute('style', 'stroke: ' + color + ';' + circleStyle);
 }
 
 /**
@@ -363,6 +420,8 @@ let createNewSVG = () => {
 	svg.setAttribute("height", "400");
 	svg.setAttribute("id", "secondSVG");
 	svgDiv.appendChild(svg);
+
+	return svg;
 }
 
 /**
