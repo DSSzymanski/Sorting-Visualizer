@@ -186,6 +186,12 @@ let startAlgorithm = async () => {
 		bubbleSort(rects);
 	}
 	else if(HEAP.localeCompare(alg) == COMPARE_TRUE){
+		if(document.querySelector("#sizeSlider").value > MAX_HEAP_SIZE) {
+			document.querySelector("#sliderTB").innerText = "Size: " + MAX_HEAP_SIZE;
+			document.querySelector("#sizeSlider").value = MAX_HEAP_SIZE;
+			generateSvgElements(MAX_HEAP_SIZE);
+			rects = getSortingElements();
+		}
 		heapSort(rects);
 	}
 }
