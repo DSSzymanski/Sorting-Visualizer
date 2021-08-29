@@ -1,4 +1,4 @@
-const timeout = 200; //used for intervals/timeouts
+const timeout = 500; //used for intervals/timeouts
 const circleStyle =  "stroke-width: 2; fill: white;";
 
 let init = () => {
@@ -476,7 +476,7 @@ let initSlider = () => {
 	const slider = document.querySelector("#sizeSlider");
 	let text = document.querySelector("#sliderTB");
 
-	const initialValue = 20;
+	const initialValue = 10;
 
 	//initialize slider, textbox, and svg elements with initial value
 	slider.value = initialValue;

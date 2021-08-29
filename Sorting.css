@@ -11,6 +11,10 @@
 	display: flex;
 }
 
+#taskbar > div {
+	margin: auto;
+}
+
 svg {
 	margin: 0px;
 }
