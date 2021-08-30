@@ -558,8 +558,8 @@ let createNewSVG = (banner) => {
 	svg.setAttribute('preserveAspectRatio', 'none');
 	
 	//add everything to base div
-	bootstrapCol.appendChild(svg);
 	bootstrapCol.appendChild(bannerH3);
+	bootstrapCol.appendChild(svg);
 	svgRowDiv.appendChild(bootstrapCol);
 
 	return svg;
