@@ -15,8 +15,8 @@ let init = () => {
  */
 let initSvg = () => {
 	const svg = document.querySelector("#sortingDisplaySvg");
-	svg.setAttribute("width", "500");
 	svg.setAttribute("height", "400");
+	svg.setAttribute('width', '400')
 }
 
 let initHeapSVG = (svg, rects) => {
@@ -37,7 +37,7 @@ let initCirclesAndTexts = (svg, rects) => {
 	let count = 0;
 	
 	for(let row = 0; row < maxRows; row++){
-		let xPos = svg.getAttribute('width') / colPerRow;
+		let xPos = svg.clientWidth / colPerRow;
 		let xOffset = xPos / 2;
 		
 		for(let col = 0; col < colPerRow; col++){
@@ -218,7 +218,6 @@ let generateSvgElements = (eleSize) => {
 	const width = svgDim[0]/eleSize;
 	
 	//constant used for sizing bars into equal heights based on svg window
-	//TODO: change for variable window size 
 	const height = 400/eleSize;
 	
 	//randomize order of numbers used to generate rect/text values
@@ -319,7 +318,7 @@ let colorElement = (rect, color) => {
 }
 
 /**
- * colorElement is called to set an inputed array of svg rects fill to inputed color.
+ * colorMultiElement is called to set an inputed array of svg rects fill to inputed color.
  * 
  * @param 	{array}			rects: array of svg rect objects to be colored.
  * @param 	{string}		color: can be html color string (e.g. 'red') or a hex color code
@@ -368,7 +367,6 @@ let moveToSecondSVG = (rect) => {
 		setTimeout(moveSecond, timeout);
 	});
 }
-
 
 /**
  * Searches Dom for all svg objects and returns the transformation strings in an array in order.
@@ -424,12 +422,12 @@ let createNewSVG = () => {
 	//find location to be added
 	const svgRowDiv = document.getElementById('svgRow');
 	const bootstrapCol = document.createElement('div');
-	bootstrapCol.setAttribute('class', 'col-md-6 col-12');
+	bootstrapCol.setAttribute('class', 'col-lg-6 col-12');
 	svgRowDiv.appendChild(bootstrapCol);
 
 	//setup and add svg
 	let svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
-	svg.setAttribute("width", "500");
+	svg.setAttribute("width", "400");
 	svg.setAttribute("height", "400");
 	svg.setAttribute("id", "secondSVG");
 	bootstrapCol.appendChild(svg);
@@ -475,7 +473,7 @@ let createRect = (height, pos, width, idName) => {
  *@return {array}		arr	Returns 2 value array of [width, height] of inputed svg element.
  */
 let getDim = (svg) => {
-	return [Number(svg.getAttribute("width")), Number(svg.getAttribute("height"))];
+	return [svg.clientWidth, svg.clientHeight];
 }
 
 let initSpeedSlider = () => {

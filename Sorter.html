@@ -13,45 +13,47 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	</head>
 	<body onload="init()">
-		<div class="row">
-			<div class="col-md-1 col-sm-0"></div>
-			<div class="col-md-10 col-sm-12">
-				<div id="taskbar" style="border: 1px solid black; margin: 1px;">
-					<div class="row">
-						<div class="col-md-3 col-sm-12 taskbarContainer">
-							<label for="algorithm">Algorithm:</label>
-							<select id="algList">
-								<option value="Bubble" selected>Bubble Sort</option>
-								<option value="Heap">Heap Sort</option>
-								<option value="Insertion">Insertion Sort</option>
-								<option value="Quick">Quick Sort</option>
-								<option value="Merge">Merge Sort</option>
-							</select>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-1 col-sm-0"></div>
+				<div class="col-md-10 col-sm-12">
+					<div class="container" id="taskbar" style="border: 1px solid black;">
+						<div class="row">
+							<div class="col-md-3 col-sm-12 taskbarContainer">
+								<label for="algorithm">Algorithm:</label>
+								<select id="algList">
+									<option value="Bubble" selected>Bubble Sort</option>
+									<option value="Heap">Heap Sort</option>
+									<option value="Insertion">Insertion Sort</option>
+									<option value="Quick">Quick Sort</option>
+									<option value="Merge">Merge Sort</option>
+								</select>
+							</div>
+							<div class="col-md-3 col-sm-12 taskbarContainer">
+								<div id="speedTB"></div>
+								<input type="range" name="speedSlider" id="speedSlider" max="1000" min="100" step="100">
+							</div>
+							<div class="col-md-3 col-sm-12 taskbarContainer">
+								<div id="sliderTB"></div>
+								<input type="range" name="sizeSlider" id="sizeSlider" max="200" min="10" step="1">
+							</div>
+							<div class="col-md-3 col-sm-12 taskbarContainer">
+								<button id="startBtn" value="Start Sort" onclick="startAlgorithm()">Start Sort</button>
+								<button id="resetBtn" value="Reset" onclick="resetSvg()">Reset</button>
+							</div>
 						</div>
-						<div class="col-md-3 col-sm-12 taskbarContainer">
-							<div id="speedTB"></div>
-							<input type="range" name="speedSlider" id="speedSlider" max="1000" min="100" step="100">
-						</div>
-						<div class="col-md-3 col-sm-12 taskbarContainer">
-							<div id="sliderTB"></div>
-							<input type="range" name="sizeSlider" id="sizeSlider" max="200" min="10" step="1">
-						</div>
-						<div class="col-md-3 col-sm-12 taskbarContainer">
-							<button id="startBtn" value="Start Sort" onclick="startAlgorithm()">Start Sort</button>
-							<button id="resetBtn" value="Reset" onclick="resetSvg()">Reset</button>
+					</div>
+					<div id="svgContainer" class="container">
+						<div class="row" id="svgRow">
+							<div class="col-lg-6 col-sm-12">
+								<svg id="sortingDisplaySvg" viewbox="0 0 398 398" preserveAspectRatio="none"></svg>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div id="svgContainer">
-					<div class="row" id="svgRow">
-						<div class="col-lg-6 col-sm-12">
-							<svg id="sortingDisplaySvg"></svg>
-						</div>
-					</div>
-				</div>
+				<div class="col-md-1 col-sm-0"></div>
 			</div>
-			<div class="col-md-1 col-sm-0"></div>
+			<div id="writeupContainer"></div>
 		</div>
-		<div id="writeupContainer"></div>
 	</body>
 </html>
