@@ -422,13 +422,17 @@ let swap = (rect1, rect2) => {
  */
 let createNewSVG = () => {
 	//find location to be added
-	const svgDiv = document.querySelector("#svgContainer");
+	const svgRowDiv = document.getElementById('svgRow');
+	const bootstrapCol = document.createElement('div');
+	bootstrapCol.setAttribute('class', 'col-md-6 col-12');
+	svgRowDiv.appendChild(bootstrapCol);
+
 	//setup and add svg
 	let svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
 	svg.setAttribute("width", "500");
 	svg.setAttribute("height", "400");
 	svg.setAttribute("id", "secondSVG");
-	svgDiv.appendChild(svg);
+	bootstrapCol.appendChild(svg);
 
 	return svg;
 }
