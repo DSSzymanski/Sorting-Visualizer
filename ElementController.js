@@ -1,12 +1,22 @@
 var timeout = 1000; //used for intervals/timeouts
 
-const circleStyle =  "stroke-width: 2; fill: white;";
+const circleStyle =  "stroke-width: 1; fill: white;";
 const MAX_HEAP_SIZE = 31; //max heap size that can fit in window
 
 let init = () => {
 	initSvg();
 	initSizeSlider();
 	initSpeedSlider();
+	initHelpIcon();
+}
+
+/**
+ * initHelpIcon sets the hover text of the help icon for the size slider.
+ */
+let initHelpIcon = () => {
+	let icon = document.getElementById('help');
+	const helpString = "Max size for heap display is 31. If slider is above 31, it will be lowered to 31 upon starting if set higher."
+	icon.setAttribute('title', helpString);
 }
 
 /**
@@ -94,7 +104,7 @@ let createHeapLine = (circle1, circle2) => {
 let createText = (col, row, xPos, yPos, xOffset, yOffset, inputText) => {
 	let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
 	text.setAttribute('x', (col * xPos) + xOffset);
-	text.setAttribute('y', (row * yPos) + 1.15 * yOffset);
+	text.setAttribute('y', (row * yPos) + 1.11 * yOffset);
 	text.setAttribute('text-anchor', 'middle');
 	text.textContent = inputText;
 	
@@ -105,7 +115,7 @@ let createCircle = (col, row, xPos, yPos, xOffset, yOffset) => {
 	let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 	circle.setAttribute('cx', (col * xPos) + xOffset);
 	circle.setAttribute('cy', (row * yPos) + yOffset);
-	circle.setAttribute('r', 15);
+	circle.setAttribute('r', 12);
 	circle.setAttribute('style', 'stroke: black;' + circleStyle);
 	
 	return circle;
@@ -418,18 +428,24 @@ let swap = (rect1, rect2) => {
  * Creates second SVG window on screen. Used in merge sort to show sorted arrays to
  * 		be merged and in heap sort to visualize the heap.
  */
-let createNewSVG = () => {
+let createNewSVG = (banner) => {
 	//find location to be added
 	const svgRowDiv = document.getElementById('svgRow');
 	const bootstrapCol = document.createElement('div');
 	bootstrapCol.setAttribute('class', 'col-lg-6 col-12');
+	const bannerH3 = document.createElement('h3');
+	bannerH3.innerText = banner;
+	bootstrapCol.appendChild(bannerH3);
+
 	svgRowDiv.appendChild(bootstrapCol);
 
 	//setup and add svg
 	let svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
-	svg.setAttribute("width", "400");
-	svg.setAttribute("height", "400");
+	svg.setAttribute("width", "402");
+	svg.setAttribute("height", "402");
 	svg.setAttribute("id", "secondSVG");
+	svg.setAttribute('viewbox', "0 0 400 400");
+	svg.setAttribute('preserveAspectRatio', 'none');
 	bootstrapCol.appendChild(svg);
 
 	return svg;

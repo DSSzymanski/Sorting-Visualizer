@@ -11,12 +11,13 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	</head>
 	<body onload="init()">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-1 col-sm-0"></div>
-				<div class="col-md-10 col-sm-12">
+				<div class="col-md-12 col-sm-12">
 					<div class="container" id="taskbar" style="border: 1px solid black;">
 						<div class="row">
 							<div class="col-md-3 col-sm-12 taskbarContainer">
@@ -34,7 +35,10 @@
 								<input type="range" name="speedSlider" id="speedSlider" max="1000" min="100" step="100">
 							</div>
 							<div class="col-md-3 col-sm-12 taskbarContainer">
-								<div id="sliderTB"></div>
+								<div style="display: flex; justify-content: center;">
+									<div id="sliderTB" style="margin: 0;"></div>
+									<i class="material-icons" id="help" style="margin-left: 2px;">help_outline</i>
+								</div>
 								<input type="range" name="sizeSlider" id="sizeSlider" max="200" min="10" step="1">
 							</div>
 							<div class="col-md-3 col-sm-12 taskbarContainer">
@@ -46,12 +50,12 @@
 					<div id="svgContainer" class="container">
 						<div class="row" id="svgRow">
 							<div class="col-lg-6 col-sm-12">
+								<h3>Graph Display</h3>
 								<svg id="sortingDisplaySvg" viewbox="0 0 398 398" preserveAspectRatio="none"></svg>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-1 col-sm-0"></div>
 			</div>
 			<div id="writeupContainer"></div>
 		</div>

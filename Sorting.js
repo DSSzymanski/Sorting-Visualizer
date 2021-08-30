@@ -6,15 +6,15 @@ const CIRCLE_NORMAL_COLOR = 'black';
 /**
  * Function called to run merge sort algorithm on inputed array of rect objects.
  *
- * @param	{array}		rects: array of rect svg elements in the svg window in order of being created (
- * 							order of unsorted elements).
- */
+* @param	{array}		rects: array of rect svg elements in the svg window in order of being created (
+* 							order of unsorted elements).
+*/
 let mergeSort = (rects) => {
 	//array containing translations of rect svg objects
 	const translations = getTranslations(rects.length);
 
 	//add extra svg for showing comparisons
-	createNewSVG();
+	createNewSVG('Stored Array');
 
 	//run mergesort
 	mergeSortAlgorithm(rects, 0, rects.length-1, translations);
@@ -122,7 +122,7 @@ let bubbleSort = async(rects) => {
 
 let heapSort = async(rects) => {
 	//add extra svg for showing heap
-	let svg = createNewSVG();
+	let svg = createNewSVG("Heap Display");
 	let circles = [], lines = [], texts = [];
 	[circles, lines, texts] = initHeapSVG(svg, rects);
 	await buildMaxHeap(rects, circles, texts);
