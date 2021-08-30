@@ -3,16 +3,10 @@
 	height: 200;
 }
 
-#sliderContainer {
+.taskbarContainer {
 	display: block;
-}
-
-#formContainer, #stepContainer, #timeContainer, #taskbar{
-	display: flex;
-}
-
-#taskbar > div {
-	margin: auto;
+	margin-top: auto;
+	margin-bottom: auto;
 }
 
 svg {
