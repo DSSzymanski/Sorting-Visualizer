@@ -1,18 +1,20 @@
 const CHANGE_COLOR = 'yellow';
 const NORMAL_COLOR = 'white';
+const CIRCLE_CHANGE_COLOR = 'red';
+const CIRCLE_NORMAL_COLOR = 'black';
 
 /**
  * Function called to run merge sort algorithm on inputed array of rect objects.
  *
- * @param	{array}		rects: array of rect svg elements in the svg window in order of being created (
- * 							order of unsorted elements).
- */
+* @param	{array}		rects: array of rect svg elements in the svg window in order of being created (
+* 							order of unsorted elements).
+*/
 let mergeSort = (rects) => {
 	//array containing translations of rect svg objects
 	const translations = getTranslations(rects.length);
 
 	//add extra svg for showing comparisons
-	createNewSVG();
+	createNewSVG('Stored Array');
 
 	//run mergesort
 	mergeSortAlgorithm(rects, 0, rects.length-1, translations);
@@ -120,25 +122,30 @@ let bubbleSort = async(rects) => {
 
 let heapSort = async(rects) => {
 	//add extra svg for showing heap
-	createNewSVG();
-
-	await buildMaxHeap(rects);
+	let svg = createNewSVG("Heap Display");
+	let circles = [], lines = [], texts = [];
+	[circles, lines, texts] = initHeapSVG(svg, rects);
+	await buildMaxHeap(rects, circles, texts);
 	for(let i = rects.length-1; i >= 1; i--) {
 		await colorMultiEle([rects[0], rects[i]], CHANGE_COLOR);
+		colorCircles(circles[0], circles[i], CIRCLE_CHANGE_COLOR);
 		await swap(rects[0], rects[i]);
 		[rects[0], rects[i]] = [rects[i], rects[0]];
+		[texts[0].textContent, texts[i].textContent] = [texts[i].textContent, texts[0].textContent];
+		colorCircles(circles[0], circles[i], CIRCLE_NORMAL_COLOR);
+		deleteLine(lines, i);
 		await colorMultiEle([rects[0], rects[i]], NORMAL_COLOR);
-		await maxHeapify(rects, 0, i-1);
+		await maxHeapify(rects, 0, i-1, circles, texts);
 	}
 }
 
-let buildMaxHeap = async(rects) => {
+let buildMaxHeap = async(rects, circles, texts) => {
 	for(let i = Math.floor((rects.length - 1) / 2); i >= 0; i--) {
-		await maxHeapify(rects, i, rects.length-1);
+		await maxHeapify(rects, i, rects.length-1, circles, texts);
 	}
 }
 
-let maxHeapify = async(rects, pos, endPos) => {
+let maxHeapify = async(rects, pos, endPos, circles, texts) => {
 	let largest = pos;
 	let left = getLeftNode(pos);
 	let right = getRightNode(pos);
@@ -154,10 +161,13 @@ let maxHeapify = async(rects, pos, endPos) => {
 	}
 	if(largest != pos) {
 		await colorMultiEle([rects[pos], rects[largest]], CHANGE_COLOR);
+		colorCircles(circles[pos], circles[largest], CIRCLE_CHANGE_COLOR);
 		await swap(rects[pos], rects[largest]);
 		[rects[pos], rects[largest]] = [rects[largest], rects[pos]];
+		[texts[pos].textContent, texts[largest].textContent] = [texts[largest].textContent, texts[pos].textContent];
 		await colorMultiEle([rects[pos], rects[largest]], NORMAL_COLOR);
-		await maxHeapify(rects, largest, endPos);
+		colorCircles(circles[pos], circles[largest], CIRCLE_NORMAL_COLOR);
+		await maxHeapify(rects, largest, endPos, circles, texts);
 	}
 }
 
@@ -190,8 +200,8 @@ let quickSort = async(rects, low=0, high=rects.length-1) => {
 	let pivot;
 	if(low < high) {
 		pivot = await partition(rects, low, high);
-		quickSort(rects, low, pivot-1);
-		quickSort(rects, pivot+1, high);
+		await quickSort(rects, low, pivot-1);
+		await quickSort(rects, pivot+1, high);
 	}
 }
 
@@ -209,19 +219,20 @@ let quickSort = async(rects, low=0, high=rects.length-1) => {
  * 
  * @returns {promise, int}	returns promise and int representing where in the pivot point in the array lies.
  */
-let partition = async (rects, low, high) => {
+let partition = async(rects, low, high) => {
 	let pivot, lowPtr, j; //j = loop iterator, lowPtr = position of lower than pivot
 	pivot = parseFloat(rects[high].getAttribute('height'));
 	lowPtr = low - 1;
 	for(j = low; j < high; j++) {
-		await colorMultiEle([rects[j], rects[lowPtr+1]], CHANGE_COLOR);
 		if(parseFloat(rects[j].getAttribute('height')) < pivot) {
 			lowPtr = lowPtr + 1;
-			await swap(rects[lowPtr], rects[j]);
-			await colorMultiEle([rects[j], rects[lowPtr]], NORMAL_COLOR);
-			[rects[lowPtr], rects[j]] = [rects[j], rects[lowPtr]];
+			if(lowPtr != j){
+				await colorMultiEle([rects[j], rects[lowPtr]], CHANGE_COLOR);
+				await swap(rects[lowPtr], rects[j]);
+				await colorMultiEle([rects[j], rects[lowPtr]], NORMAL_COLOR);
+				[rects[lowPtr], rects[j]] = [rects[j], rects[lowPtr]];
+			}
 		}
-		await colorMultiEle([rects[j], rects[lowPtr+1]], NORMAL_COLOR);
 	}
 	if(lowPtr+1 != high){
 		await colorMultiEle([rects[high], rects[lowPtr+1]], CHANGE_COLOR);

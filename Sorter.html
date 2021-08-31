@@ -11,45 +11,53 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	</head>
 	<body onload="init()">
-		<div class="row">
-			<div class="col-md-1 col-sm-0"></div>
-			<div class="col-md-10 col-sm-12">
-				<div id="taskbar" style="border: 1px solid black;">
-					<div algContainer>
-						<label for="algorithm">Algorithm:</label>
-						<select id="algList">
-							<option value="Insertion">Insertion Sort</option>					
-							<option value="Quick">Quick Sort</option>
-							<option value="Heap" selected>Heap Sort</option>
-							<option value="Bubble">Bubble Sort</option>
-							<option value="Merge">Merge Sort</option>
-						</select>
-					</div>
-					<div id="sliderContainer">
-						<div id="sliderTB"></div>
-						<input type="range" name="sizeSlider" id="sizeSlider" max="200" min="10" step="10">
-					</div>
-					<button id="startBtn" value="Start Sort" onclick="startAlgorithm()">Start Sort</button>
-					<button id="resetBtn" value="Reset" onclick="resetSvg()">Reset</button>
-					<div id="metricsContainer">
-						<div id="stepContainer">
-							<label id="stepLabel">Steps:</label>
-							<div id="stepTB">0</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<div class="container" id="taskbar" style="border: 1px solid black;">
+						<div class="row">
+							<div class="col-md-3 col-sm-12 taskbarContainer">
+								<label for="algorithm">Algorithm:</label>
+								<select id="algList">
+									<option value="Bubble" selected>Bubble Sort</option>
+									<option value="Heap">Heap Sort</option>
+									<option value="Insertion">Insertion Sort</option>
+									<option value="Quick">Quick Sort</option>
+									<option value="Merge">Merge Sort</option>
+								</select>
+							</div>
+							<div class="col-md-3 col-sm-12 taskbarContainer">
+								<div id="speedTB"></div>
+								<input type="range" name="speedSlider" id="speedSlider" max="1000" min="100" step="100">
+							</div>
+							<div class="col-md-3 col-sm-12 taskbarContainer">
+								<div style="display: flex; justify-content: center;">
+									<div id="sliderTB" style="margin: 0;"></div>
+									<i class="material-icons" id="help" style="margin-left: 2px;">help_outline</i>
+								</div>
+								<input type="range" name="sizeSlider" id="sizeSlider" max="200" min="10" step="1">
+							</div>
+							<div class="col-md-3 col-sm-12 taskbarContainer">
+								<button id="startBtn" value="Start Sort" onclick="startAlgorithm()">Start Sort</button>
+								<button id="resetBtn" value="Reset" onclick="resetSvg()">Reset</button>
+							</div>
 						</div>
-						<div id="timeContainer">
-							<label id="timeLabel">Time(s):</label>
-							<div id="timeTB">0</div>
+					</div>
+					<div id="svgContainer" class="container">
+						<div class="row" id="svgRow">
+							<div class="col-lg-6 col-sm-12">
+								<h3>Graph Display</h3>
+								<svg id="sortingDisplaySvg" viewbox="0 0 398 398" preserveAspectRatio="none"></svg>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div id="svgContainer">
-					<svg id="sortingDisplaySvg"></svg>
 				</div>
 			</div>
-			<div class="col-md-1 col-sm-0"></div>
+			<div id="writeupContainer"></div>
 		</div>
-		<div id="writeupContainer"></div>
 	</body>
 </html>
