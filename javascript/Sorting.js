@@ -19,6 +19,8 @@ let mergeSort = (rects) => {
 
 	//run recursive mergesort algorithm
 	mergeSortAlgorithm(rects, 0, rects.length-1, translations);
+
+	enableResetBtn();
 }
 
 /**
@@ -122,6 +124,7 @@ let bubbleSort = async(rects) => {
 			await colorMultiEle([rects[j], rects[j-1]], NORMAL_COLOR);
 		}
 	}
+	enableResetBtn();
 }
 
 /**
@@ -166,6 +169,8 @@ let heapSort = async(rects) => {
 		//re-heap tree
 		await maxHeapify(rects, 0, i-1, circles, texts);
 	}
+
+	enableResetBtn();
 }
 
 /**
@@ -275,6 +280,17 @@ let getRightNode = (pos) => {
 }
 
 /**
+ * quickSort starts the recursive quick sort algorithm and enables the reset button when comleted.
+ * 
+ * @param	{array}		rects: array of rect svg elements in the svg window in order of being created (
+ * 							   order of unsorted elements).
+ */
+let quickSort = async(rects) => {
+	await quickSortAlgorithm(rects);
+	enableResetBtn();
+}
+
+/**
  * Quick sort algorithm. Run when algorithm select box is on Quick sort and start button is clicked.
  *
  * Basic Quick sort using the text values found within the text svg elements to compare. Uses last element
@@ -287,13 +303,13 @@ let getRightNode = (pos) => {
  * @param	{int}		low: minimum index for algorithm to examine. Default 0.
  * @param	{int}		high: maximum index for algorithm to examine. Defaults to last index in array.
  */
-let quickSort = async(rects, low=0, high=rects.length-1) => {
+let quickSortAlgorithm = async(rects, low=0, high=rects.length-1) => {
 	let pivot;
 	if(low < high) {
 		pivot = await partition(rects, low, high);
 		//recursively call
-		await quickSort(rects, low, pivot-1);
-		await quickSort(rects, pivot+1, high);
+		await quickSortAlgorithm(rects, low, pivot-1);
+		await quickSortAlgorithm(rects, pivot+1, high);
 	}
 }
 
@@ -372,4 +388,5 @@ let insertionSort = async(rects) => {
 			compRectIdx -= 1;
 		}
 	}
+	enableResetBtn();
 }
