@@ -458,9 +458,11 @@ let colorMultiEle = (rects, color) => {
  * 		call.
  * 
  * @param 	{svg rect}	rect: rect object to be moved.
+ * @param 	{string}		color: can be html color string (e.g. 'red') or a hex color code
+ * 								   (e.g. '#FFFFFF'). 
  */
-let hideElement = async(rect) => {
-	await colorElement(rect, 'red'); //color to indicate moving to second screen
+let hideElement = async(rect, color) => {
+	await colorElement(rect, color); //color to indicate moving to second screen
 	await moveToSecondSVG(rect); //move to second svg window
 }
 

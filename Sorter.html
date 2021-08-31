@@ -2,9 +2,6 @@
 <html lang="en">
 	<head>
 		<title>Sorting Visualizer</title>
-		<link href="Sorting.css" rel="stylesheet" type="text/css">
-		<script src="Sorting.js" type="text/javascript"></script>
-		<script src="ElementController.js" type="text/javascript"></script>
 
 		<!--Bootstrap CDN links-->
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -13,16 +10,23 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link href="Sorting.css" rel="stylesheet" type="text/css">
+		<script src="Sorting.js" type="text/javascript"></script>
+		<script src="ElementController.js" type="text/javascript"></script>
 	</head>
-	<body onload="init()">
+	<body onload="init()" class="bg-">
 		<div class="container">
+			<div class="row" style="text-align: center; display: block">
+					<h1>Sorting Visualizer</h1>
+			</div>
 			<div class="row">
 				<div class="col-md-12 col-sm-12">
-					<div class="container" id="taskbar" style="border: 1px solid black;">
+					<div class="container innerContainer" id="taskbar" style="border: 1px solid black; border-radius: 5px;">
 						<div class="row">
-							<div class="col-md-3 col-sm-12 taskbarContainer">
-								<label for="algorithm">Algorithm:</label>
-								<select id="algList">
+							<div class="col-lg-2 col-sm-0"></div>
+							<div class="col-lg-2 col-md-3 col-sm-12 taskbarContainer">
+								<label for="algorithm" style='margin-bottom: 0;'>Algorithm:</label>
+								<select id="algList" style='margin-bottom: .5rem;'>
 									<option value="Bubble" selected>Bubble Sort</option>
 									<option value="Heap">Heap Sort</option>
 									<option value="Insertion">Insertion Sort</option>
@@ -30,24 +34,25 @@
 									<option value="Merge">Merge Sort</option>
 								</select>
 							</div>
-							<div class="col-md-3 col-sm-12 taskbarContainer">
+							<div class="col-lg-2 col-md-3 col-sm-12 taskbarContainer">
 								<div id="speedTB"></div>
 								<input type="range" name="speedSlider" id="speedSlider" max="1000" min="100" step="100">
 							</div>
-							<div class="col-md-3 col-sm-12 taskbarContainer">
+							<div class="col-lg-2 col-md-3 col-sm-12 taskbarContainer">
 								<div style="display: flex; justify-content: center;">
 									<div id="sliderTB" style="margin: 0;"></div>
 									<i class="material-icons" id="help" style="margin-left: 2px;">help_outline</i>
 								</div>
 								<input type="range" name="sizeSlider" id="sizeSlider" max="200" min="10" step="1">
 							</div>
-							<div class="col-md-3 col-sm-12 taskbarContainer">
+							<div class="col-lg-2 col-md-3 col-sm-12 taskbarContainer">
 								<button id="startBtn" value="Start Sort" onclick="startAlgorithm()">Start Sort</button>
 								<button id="resetBtn" value="Reset" onclick="resetSvg()">Reset</button>
 							</div>
+							<div class="col-lg-2 col-sm-0"></div>
 						</div>
 					</div>
-					<div id="svgContainer" class="container">
+					<div id="svgContainer" class="container innerContainer">
 						<div class="row" id="svgRow">
 							<div class="col-lg-6 col-sm-12">
 								<h3>Graph Display</h3>
@@ -57,7 +62,20 @@
 					</div>
 				</div>
 			</div>
-			<div id="writeupContainer"></div>
+			<div id="writeupContainer">
+				<h3>Description</h3>
+				<p>
+					Program displays 5 sorting algorithm; Bubble Sort, Heap Sort, Insertion Sort, Merge Sort, and Quick sort.
+					All sorts will display a single bar graph representing an array of numbers while Merge Sort will display 
+					a second graph representing left and right side arrays being merged and Heap Sort will also display a second
+					display showing the heap binary tree.
+				</p>
+				<h3>Controls</h3>
+				<p>
+					Clicking on the algorithm drop down will open it and let you select which algorithm to run. Adjusting the speed
+					slider changes how fast the algorithm runs in milliseconds (100ms - 1000ms). The size slider will adjust how many elements are sorted in the display (10-200). *NOTE* the size slider will change to 31 if above 31 and heap sort is selected due to display limitations. The Start Sort button runs the algorithm and the reset button resets the display.
+				</p>
+			</div>
 		</div>
 	</body>
 </html>
