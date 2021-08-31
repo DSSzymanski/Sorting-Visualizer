@@ -234,6 +234,14 @@ let colorCircles = (circle1, circle2, color) => {
 }
 
 /**
+ * enableResetBtn is called when algorithms are finished running to
+ * enable the button for resetting the program.
+ */
+let enableResetBtn = () => {
+	document.querySelector("#resetBtn").disabled = false;
+}
+
+/**
  *Function for reset button onclick.
  *
  *Re-generates svg elements (rect and text pairs) based on slider side.
@@ -247,8 +255,8 @@ let resetSvg = () => {
 	slider.disabled = false;
 
 	//remove second svg if merge sort or heap sort was called prior
-	if(!!document.getElementById("secondSVG")){
-		document.getElementById("secondSVG").remove();
+	if(!!document.getElementById("secondSVGDiv")){
+		document.getElementById("secondSVGDiv").remove();
 	}
 
 	//re-generate svg elements
@@ -275,6 +283,7 @@ let startAlgorithm = async () => {
 	const algSelect = document.querySelector("#algList");
 	//disable buttons to prevent algorithm from being run multiple times/interupted
 	document.querySelector("#startBtn").disabled = true;
+	document.querySelector("#resetBtn").disabled = true;
 	document.querySelector("#sizeSlider").disabled = true;
 
 	//get elements in svg
@@ -546,6 +555,7 @@ let createNewSVG = (banner) => {
 	//parent structure
 	const bootstrapCol = document.createElement('div');
 	bootstrapCol.setAttribute('class', 'col-lg-6 col-12');
+	bootstrapCol.setAttribute('id', 'secondSVGDiv');
 	
 	//text to be added
 	const bannerH3 = document.createElement('h3');
