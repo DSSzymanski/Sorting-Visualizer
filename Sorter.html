@@ -16,13 +16,17 @@
 	</head>
 	<body onload="init()">
 		<div class="container">
+			<div class="row" style="text-align: center; display: block">
+					<h1>Sorting Visualizer</h1>
+			</div>
 			<div class="row">
 				<div class="col-md-12 col-sm-12">
 					<div class="container" id="taskbar" style="border: 1px solid black;">
 						<div class="row">
-							<div class="col-md-3 col-sm-12 taskbarContainer">
-								<label for="algorithm">Algorithm:</label>
-								<select id="algList">
+							<div class="col-md-2 col-sm-0"></div>
+							<div class="col-md-2 col-sm-12 taskbarContainer">
+								<label for="algorithm" style='margin-bottom: 0;'>Algorithm:</label>
+								<select id="algList" style='margin-bottom: .5rem;'>
 									<option value="Bubble" selected>Bubble Sort</option>
 									<option value="Heap">Heap Sort</option>
 									<option value="Insertion">Insertion Sort</option>
@@ -30,21 +34,22 @@
 									<option value="Merge">Merge Sort</option>
 								</select>
 							</div>
-							<div class="col-md-3 col-sm-12 taskbarContainer">
+							<div class="col-md-2 col-sm-12 taskbarContainer">
 								<div id="speedTB"></div>
 								<input type="range" name="speedSlider" id="speedSlider" max="1000" min="100" step="100">
 							</div>
-							<div class="col-md-3 col-sm-12 taskbarContainer">
+							<div class="col-md-2 col-sm-12 taskbarContainer">
 								<div style="display: flex; justify-content: center;">
 									<div id="sliderTB" style="margin: 0;"></div>
 									<i class="material-icons" id="help" style="margin-left: 2px;">help_outline</i>
 								</div>
 								<input type="range" name="sizeSlider" id="sizeSlider" max="200" min="10" step="1">
 							</div>
-							<div class="col-md-3 col-sm-12 taskbarContainer">
+							<div class="col-md-2 col-sm-12 taskbarContainer">
 								<button id="startBtn" value="Start Sort" onclick="startAlgorithm()">Start Sort</button>
 								<button id="resetBtn" value="Reset" onclick="resetSvg()">Reset</button>
 							</div>
+							<div class="col-md-2 col-sm-0"></div>
 						</div>
 					</div>
 					<div id="svgContainer" class="container">
